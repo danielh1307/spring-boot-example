@@ -3,6 +3,7 @@ package io.fabric8.itests;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static io.fabric8.kubernetes.assertions.Assertions.assertThat;
@@ -14,6 +15,7 @@ import static io.fabric8.kubernetes.assertions.Assertions.assertThat;
  * This test creates a new Kubernetes Namespace for the duration of the test.
  * For more information see: http://fabric8.io/guide/testing.html
  */
+@Ignore
 @RunWith(Arquillian.class)
 public class IntegrationTestKT {
 
