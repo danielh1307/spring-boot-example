@@ -1,9 +1,0 @@
----
-buildName: "spring-boot-example"
-links:
-  Git: "http://gogs/danielh1307/spring-boot-example.git"
-  Job: "http://192.168.99.100:31656/job/spring-boot-example"
-  Testing: "http://10.0.0.104:80/kubernetes/pods?namespace=default-testing"
-environments:
-  Testing: "default-testing"
-useLocalFlow: true
