@@ -1,0 +1,6 @@
+********************
+My super-cool banner
+********************
+
+Titel: ${application.title}
+Version: ${application.version}
