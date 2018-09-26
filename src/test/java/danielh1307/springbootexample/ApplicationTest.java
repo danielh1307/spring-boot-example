@@ -11,8 +11,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest
+@RunWith(SpringRunner.class) // use specific SpringRunner to run the tests
+@WebMvcTest // only Spring MVC components are tested
 public class ApplicationTest {
 
     @Autowired
