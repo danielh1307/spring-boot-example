@@ -11,6 +11,11 @@
 	<name>spring-boot-example</name>
 	<description>Demo project for Spring Boot</description>
 
+    <!-- Advantages when using the spring-boot-starter-parent: -->
+    <!-- useful default settings like UTF-8, Java version, compiler flag -parameters etc. -->
+    <!-- easy override specific versions like for example <tomcat.version>8.5.9</tomcat.version> -->
+    <!-- if you have to import the "bill of materials", you have to set all the settings yourself and -->
+    <!-- overriding specific versions is much more complicated -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -33,8 +38,23 @@
 		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
+				<!-- ./mvnw package ==> leads to *.jar (executable jar) and *.jar.original (all classes and resources just of this application -->
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<!-- this creates a file META-INF/build-info.properties which contains useful build information and can be shown by an actuator -->
+							<!-- you can even add your own properties -->
+							<goal>build-info</goal>
+						</goals>
+						<configuration>
+							<additionalProperties>
+								<my-additional-property>here I can put anything</my-additional-property>
+							</additionalProperties>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
