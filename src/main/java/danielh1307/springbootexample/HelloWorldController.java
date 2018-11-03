@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloWorldController {
 
     // by default this property is read from application.properties
+    // expression within @Value is SpEL (Spring Expression Language)
+    // this is done by registering a PropertySourcesPlaceholderConfigurer
     @Value("${myProperty}")
     private String myProperty;
 
