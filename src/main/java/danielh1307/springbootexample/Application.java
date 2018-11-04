@@ -30,7 +30,7 @@ public class Application {
         // true is the default here
         // if set to false, you cannot pass command line properties from outside
         // e.g. java -jar target/spring-boot-example.jar --myProperty="different value" is not working any more
-        // but what is still working is pass it to spring-boot-plugin: ./mvnw spring-boot:run -DmyProperty="different value"
+        // but what is still working is pass it to spring-boot-plugin: ./mvnw spring-boot:run -DmyProperty="different value" (because here you are setting a system property)
         springApplication.setAddCommandLineProperties(false);
     }
 }
