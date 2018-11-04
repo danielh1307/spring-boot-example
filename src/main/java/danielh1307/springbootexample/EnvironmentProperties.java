@@ -2,11 +2,12 @@ package danielh1307.springbootexample;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
 @Component
 @ConfigurationProperties("environment")
-@Validated
+// @Validated can be used to validate properties with JSR 303 (Bean Validation)
+// you can put annotations to properties like @Min(10)
+// but BeanValidation must be accessible on classpath, e.g. with spring-boot-starter-validation
 public class EnvironmentProperties {
 
     private String prop1;
