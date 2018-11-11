@@ -28,6 +28,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<!-- Exposes several endpoints below /actuator, but some of them must be activated with properties (management.endpoints.web.exposure.include) -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -52,6 +57,7 @@
 					<execution>
 						<goals>
 							<!-- this creates a file META-INF/build-info.properties which contains useful build information and can be shown by an actuator -->
+							<!-- the endpoint would be: http://localhost:8080/actuator/info -->
 							<!-- you can even add your own properties -->
 							<goal>build-info</goal>
 						</goals>
