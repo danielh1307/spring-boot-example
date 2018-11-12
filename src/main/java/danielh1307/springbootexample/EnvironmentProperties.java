@@ -3,7 +3,6 @@ package danielh1307.springbootexample;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Component
 // @ConfigurationProperites supports relaxed binding and generation of metadata
 @ConfigurationProperties("environment")
 // @Validated can be used to validate properties with JSR 303 (Bean Validation)

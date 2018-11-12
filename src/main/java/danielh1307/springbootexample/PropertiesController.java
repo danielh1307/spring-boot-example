@@ -1,10 +1,16 @@
 package danielh1307.springbootexample;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+// The annotation @EnableConfigurationProperties registers the class (EnvironmentProperties) as Spring bean.
+// Otherwise it would not be found (except you annotate it with e.g. @Component).
+// So @EnableConfigurationProperties is an easy way to register a configuration class as Spring bean without annotating it itself.
+// See https://stackoverflow.com/questions/49880453/what-difference-does-enableconfigurationproperties-make-if-a-bean-is-already-an
+@EnableConfigurationProperties(EnvironmentProperties.class)
 public class PropertiesController {
 
     // by default this property is read from application.properties
