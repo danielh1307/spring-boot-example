@@ -44,6 +44,13 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<!-- if application is stared with java -jar, the devtools are not active -->
+			<!-- to apply the changes, in IntelliJ the project must be built (Build -> Build Project or COMMAND + F9) -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional> <!-- only used if specific features are active; optional dependencies are not inherited transitively -->
+		</dependency>
 	</dependencies>
 
 	<build>
