@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+// @Controller is a component which is registered by an instance of RequestMappingHandlerMapping
+// methods of @Controller are mapped to URLs
+// @RestController is annotated with @Controller and @ResponseBody
+// @ResponseBody binds the return value directly to the web response body (by using an HttpMessageConverter)
 @RestController
 public class HelloWorldController {
 
