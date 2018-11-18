@@ -1,6 +1,5 @@
 package danielh1307.springbootexample;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,24 +10,23 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class) // use specific SpringRunner to run the tests
-@WebMvcTest // only Spring MVC components are tested
-@ComponentScan // this is needed since we are wiring components in the classes to test (e.g. PropertiesController)
-public class ApplicationTest {
-
+@RunWith(SpringRunner.class)
+@WebMvcTest
+@ComponentScan
+@ActiveProfiles("dev") // use this to test a specific profile
+public class PropertiesApplicationDevTest {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void helloWorldShouldWork() throws Exception {
+    public void singlePropertyDev() throws Exception {
         this.mockMvc
-                .perform(get("/hello").param("name", "World"))
+                .perform(get("/singleProperty"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(startsWith("Hello, World")));
+                .andExpect(content().string(containsString("DEV")));
     }
 }

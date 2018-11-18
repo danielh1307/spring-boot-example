@@ -17,17 +17,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest
 @ComponentScan
-@ActiveProfiles("dev") // use this to test a specific profile
-public class DevApplicationTest {
+public class PropertiesApplicationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void singlePropertyDev() throws Exception {
+    public void singleProperty() throws Exception {
         this.mockMvc
                 .perform(get("/singleProperty"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("DEV")));
+                .andExpect(content().string("original value" + "\n"));
+    }
+
+    @Test
+    public void envProperties() throws Exception {
+        this.mockMvc
+                .perform(get("/envProperties"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("first property")))
+                .andExpect(content().string(containsString("second property")));
     }
 }
