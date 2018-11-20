@@ -46,6 +46,13 @@ public class FilmControllerTest {
     }
 
     @Test
+    public void getUnknownFilmReturns404Error() throws Exception {
+        this.mockMvc
+                .perform(get("/films/number/4"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void getFilmAsModelShouldWork() throws Exception {
         // either with strings ...
         this.mockMvc
