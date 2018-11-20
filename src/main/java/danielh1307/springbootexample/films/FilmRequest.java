@@ -12,6 +12,7 @@ public class FilmRequest {
     }
 
     // TODO: check why this must be public
+    // check this: https://stackoverflow.com/questions/28466207/could-not-find-acceptable-representation-using-spring-boot-starter-web
     public int getNumber() {
         return number;
     }
