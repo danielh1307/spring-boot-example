@@ -1,1 +1,12 @@
-<h1>Films</h1>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Films</title>
+</head>
+<body>
+    Title: <p th:text="${films.name}"/><br/>
+    Year: <p th:text="${films.year}"/>
+</body>
+</html>

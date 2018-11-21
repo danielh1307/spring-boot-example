@@ -3,10 +3,12 @@ package danielh1307.springbootexample.films;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Part;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,6 +39,8 @@ public class FilmController {
     }
 
     // TODO: test missing
+    // TODO: test ModelAndView, see https://stackoverflow.com/questions/44319070/how-to-access-variables-in-thymeleaf-templates-using-spring-mvc
+    // somehow, the data was passed as GET parameters, see also https://www.baeldung.com/spring-redirect-and-forward
     @GetMapping("/filmUploaded")
     public String filmUploaded() {
         return "filmUploaded";
