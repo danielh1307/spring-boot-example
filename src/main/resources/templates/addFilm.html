@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Here you can upload your film</title>
+</head>
+<body>
+    <form action="/films/addFilm" method="POST" enctype="multipart/form-data">
+        Titel:<br/>
+        <input type="text" name="title"><br/>
+        Jahr:<br/>
+        <input type="text" name="year"><br/>
+        Cover:<br/>
+        <input type="file" name="cover"><br/>
+        <input type="submit" value="Abschicken">
+    </form>
+</body>
+</html>

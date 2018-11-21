@@ -28,7 +28,7 @@ public class FilmControllerTest {
     @Test
     public void csvViewShouldWork() throws Exception {
         mockMvc
-                .perform(get("/films").accept("text/csv"))
+                .perform(get("/films/overview").accept("text/csv"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("films"))
                 .andExpect(content().string("Pulp Fiction,1996"));
