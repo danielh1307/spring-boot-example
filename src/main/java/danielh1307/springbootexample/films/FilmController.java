@@ -36,16 +36,19 @@ public class FilmController {
         return "films";
     }
 
+    // TODO: test missing
     @GetMapping("/filmUploaded")
     public String filmUploaded() {
         return "filmUploaded";
     }
 
+    // TODO: test missing
     @GetMapping("/addFilm")
     public String getFilmForm() {
         return "addFilm";
     }
 
+    // TODO: test missing
     // Be aware to configure spring.servlet.multipart.max-file-size
     @PostMapping("/addFilm")
     public String uploadFilm(FilmForm filmForm, @RequestParam Part cover) throws IOException  {

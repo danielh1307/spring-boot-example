@@ -12,6 +12,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
+    // TODO: test missing
     @Override
     public void registerWebSocketHandlers(
             WebSocketHandlerRegistry registry)
