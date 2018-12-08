@@ -2,7 +2,7 @@ package danielh1307.springbootexample.films;
 
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/api/films")
@@ -22,12 +22,11 @@ public class FilmRestController {
         }
     }
 
-    // we are using same mapping as getFilmAsString, but with a different content type
-    // curl http://localhost:8080/films/default (or with -H "Accept: application/text") --> getFilmAsString --> String response
-    // curl -H "accept: application/json" http://localhost:8080/films/default --> getFilmAsModel --> JSON response
-    @GetMapping(value = "/default", produces = APPLICATION_JSON_UTF8_VALUE)
-    public Film getFilmAsModel() {
-        // this automatically returns the film in JSON format (thanks to @ResponseBody)
+    // curl http://localhost:8080/api/films/1?mediaType=json ==> returns JSON value
+    // curl http://localhost:8080/api/films/1?mediaType=xml ==> returns XML value
+    // see WebConfig for the configuration
+    @GetMapping(value = "/{filmId}", produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    public Film getFilmAsModel(@PathVariable final String filmId) {
         return new Film("Pulp Fiction", 1996);
     }
 

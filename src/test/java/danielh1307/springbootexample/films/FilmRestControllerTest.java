@@ -54,10 +54,10 @@ public class FilmRestControllerTest {
     }
 
     @Test
-    public void getFilmAsModelShouldWork() throws Exception {
+    public void getFilmAsJsonModelShouldWork() throws Exception {
         // either with strings ...
         this.mockMvc
-                .perform(get("/api/films/default").accept("application/json"))
+                .perform(get("/api/films/1"))
                 .andExpect(status().isOk())
                 // content().json --> the attributes must not be in the same order
                 .andExpect(content().json("{\"year\": 1996, \"name\": \"Pulp Fiction\"}"));
@@ -65,11 +65,18 @@ public class FilmRestControllerTest {
         // ... or with objects
         Film expectedResultObject = new Film("Pulp Fiction", 1996);
         this.mockMvc
-                .perform(get("/api/films/default").accept("application/json"))
+                .perform(get("/api/films/1"))
                 .andExpect(status().isOk())
                 // content().json --> the attributes must not be in the same order
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedResultObject)));
+    }
 
+    @Test
+    public void getFilmAsXmlModelShouldWork() throws Exception {
+        this.mockMvc
+                .perform(get("/api/films/1").param("mediaType", "xml"))
+                .andExpect(status().isOk())
+                .andExpect(content().xml("<Film><name>Pulp Fiction</name><year>1996</year></Film>"));
     }
 
     @Test

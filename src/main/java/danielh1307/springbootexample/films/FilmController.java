@@ -27,8 +27,14 @@ public class FilmController {
 
     private static final Logger LOGGER = getLogger(FilmController.class);
 
-    // TODO: add documentation. This only worked when setting properties in application.properties.
-    // TODO: check which of these properties we really need and what they mean.
+    // we have a HtmlUnit test for this method
+    // curl http://localhost:8080/films/overview --> returns HTML
+    // ********************* The following is currently not working *************************************
+    // curl --header "Accept: text/csv" http://localhost:8080/films/overview --> returns CSV
+    // This works because we have the "view" FilmsCsvView which extends AbstractView
+    // Please note for this to work we need properties spring.mvc.content-negotiation.media-types.csv and
+    // spring.mvc.contentnegotiation.favor-parameter in application.properties
+    // **************************************************************************************************
     @GetMapping("/overview")
     public String getFilm(final Model model) {
         model.addAttribute("films", new Film("Pulp Fiction", 1996));
