@@ -1,8 +1,7 @@
 package danielh1307.springbootexample.films;
 
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.*;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,12 +50,39 @@ public class FilmControllerTest {
         }
         HtmlElement bodyElement = htmlPage.getBody();
 
-        List<HtmlElement> htmlElementsFilmName = getHtmlElementsByItemprop(bodyElement, "filmname");
-        List<HtmlElement> htmlElementsFilmYear = getHtmlElementsByItemprop(bodyElement, "filmyear");
-        assertThat(htmlElementsFilmName, hasSize(1));
-        assertThat(htmlElementsFilmYear, hasSize(1));
-        assertThat(htmlElementsFilmName.get(0).getFirstChild().getNodeValue(), is(equalTo("Pulp Fiction")));
-        assertThat(htmlElementsFilmYear.get(0).getFirstChild().getNodeValue(), is(equalTo("1996")));
+        HtmlElement filmName = getFirstHtmlElementsByItemprop(bodyElement, "filmname");
+        HtmlElement filmYear = getFirstHtmlElementsByItemprop(bodyElement, "filmyear");
+        assertThat(filmName.getFirstChild().getNodeValue(), is(equalTo("Pulp Fiction")));
+        assertThat(filmYear.getFirstChild().getNodeValue(), is(equalTo("1996")));
+    }
+
+    @Test
+    public void htmlFilmUploadFormIsCorrect() throws Exception {
+        HtmlPage htmlPage;
+        try (final WebClient webClient = new WebClient()) {
+            webClient.getOptions().setRedirectEnabled(true);
+            htmlPage = webClient.getPage("http://localhost:8080/films/addFilm");
+
+            HtmlElement bodyElement = htmlPage.getBody();
+
+            HtmlForm form = htmlPage.getForms().get(0);
+            HtmlInput filmTitleInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");
+            HtmlInput filmYearInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmyear");
+            HtmlFileInput fileInput = (HtmlFileInput) getFirstHtmlElementsByItemprop(bodyElement, "filmcover");
+            HtmlSubmitInput submitButton = form.getOneHtmlElementByAttribute("input", "type", "submit");
+
+            filmTitleInput.setValueAttribute("Pulp Fiction");
+            filmYearInput.setValueAttribute("1996");
+            fileInput.setData("abcdef".getBytes());
+            fileInput.setContentType("application/pdf");
+            HtmlPage redirectedPage = submitButton.click();
+
+            bodyElement = redirectedPage.getBody();
+
+            HtmlElement filmNameElement = getFirstHtmlElementsByItemprop(bodyElement, "filmname");
+            assertThat(filmNameElement.getFirstChild().getNodeValue(), is(equalTo("Pulp Fiction-1996.jpg")));
+        }
+
     }
 
     // TODO: This test currently fails since the attributes for content negotiation are commented in application.properties.
@@ -72,9 +98,10 @@ public class FilmControllerTest {
                 .andExpect(content().string("Pulp Fiction,1996"));
     }
 
-    private List<HtmlElement> getHtmlElementsByItemprop(HtmlElement htmlElement, String itemprop) {
+    private HtmlElement getFirstHtmlElementsByItemprop(HtmlElement htmlElement, String itemprop) {
         return stream(htmlElement.getHtmlElementDescendants().spliterator(), false)
                 .filter((element) -> element.getAttribute("itemprop").equals(itemprop))
-                .collect(toList());
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("HTML element with itemprop " + itemprop + " not found"));
     }
 }

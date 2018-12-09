@@ -5,14 +5,14 @@
     <title>Here you can upload your film</title>
 </head>
 <body>
-    <form action="/films/addFilm" method="POST" enctype="multipart/form-data">
+    <form action="/films/filmUpload" method="POST" enctype="multipart/form-data" itemprop="addFilmForm">
         Titel:<br/>
-        <input type="text" name="title"><br/>
+        <input type="text" name="title" itemprop="filmtitle"/><br/>
         Jahr:<br/>
-        <input type="text" name="year"><br/>
+        <input type="text" name="year" itemprop="filmyear"/><br/>
         Cover:<br/>
-        <input type="file" name="cover"><br/>
-        <input type="submit" value="Abschicken">
+        <input type="file" name="cover" itemprop="filmcover"/><br/>
+        <input type="submit" value="Abschicken" itemprop="submitbutton"/>
     </form>
 </body>
 </html>

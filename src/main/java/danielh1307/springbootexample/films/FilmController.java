@@ -3,10 +3,13 @@ package danielh1307.springbootexample.films;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Part;
 import java.io.File;
@@ -36,7 +39,7 @@ public class FilmController {
     // spring.mvc.contentnegotiation.favor-parameter in application.properties
     // **************************************************************************************************
     @GetMapping("/overview")
-    public String getFilm(final Model model) {
+    public String overview(final Model model) {
         model.addAttribute("films", new Film("Pulp Fiction", 1996));
         // this only works if spring-boot-starter-thymeleaf is used
         // otherwise I had 404 errors because there were no associated views
@@ -44,31 +47,30 @@ public class FilmController {
         return "films";
     }
 
-    // TODO: test missing
-    // TODO: test ModelAndView, see https://stackoverflow.com/questions/44319070/how-to-access-variables-in-thymeleaf-templates-using-spring-mvc
-    // somehow, the data was passed as GET parameters, see also https://www.baeldung.com/spring-redirect-and-forward
     @GetMapping("/filmUploaded")
     public String filmUploaded() {
         return "filmUploaded";
     }
 
-    // TODO: test missing
     @GetMapping("/addFilm")
     public String getFilmForm() {
         return "addFilm";
     }
 
-    // TODO: test missing
     // Be aware to configure spring.servlet.multipart.max-file-size
-    @PostMapping("/addFilm")
-    public String uploadFilm(FilmForm filmForm, @RequestParam Part cover) throws IOException  {
+    @PostMapping("/filmUpload")
+    public ModelAndView uploadFilm(FilmForm filmForm, @RequestParam MultipartFile cover, ModelMap modelMap) throws IOException  {
         LOGGER.info("Added new film: " + filmForm.getTitle() + ", " + filmForm.getYear());
         LOGGER.info("And the content is: " + cover);
-        saveFile(cover, filmForm.getTitle() + "-" + filmForm.getYear() + ".jpg");
-        return "redirect:filmUploaded";
+        String filename = filmForm.getTitle() + "-" + filmForm.getYear() + ".jpg";
+        saveFile(cover, filename);
+        // this data is passed as GET parameter to the new URL
+        // in Thymeleaf, we can access it with ${param.filmname}
+        modelMap.addAttribute("filmname", filename);
+        return new ModelAndView("redirect:filmUploaded", modelMap);
     }
 
-    private void saveFile(Part part, String filename) throws IOException {
+    private void saveFile(MultipartFile part, String filename) throws IOException {
         try(FileOutputStream fos = new FileOutputStream(new File(filename))) {
             InputStream is = part.getInputStream();
             int read = 0;

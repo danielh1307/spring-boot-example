@@ -6,7 +6,7 @@
     <title>Film Uploaded</title>
 </head>
 <body>
-    Thanks for uploading your film with title <p th:text="TODO"/>.<br/>
+    Thanks for uploading your film with title <p th:text="${param.filmname}" itemprop="filmname"/>.<br/>
     <a href="addFilm">Nochmal</a><br/>
     <a href="overview">Zurück</a>
 </body>
