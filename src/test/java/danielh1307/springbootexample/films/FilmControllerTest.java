@@ -1,25 +1,22 @@
 package danielh1307.springbootexample.films;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.web.htmlunit.LocalHostWebClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.servlet.htmlunit.MockMvcWebClientBuilder.webAppContextSetup;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,7 +32,7 @@ public class FilmControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private LocalHostWebClient localHostWebClient;
 
     /**
      * This is an example how HtmlUnit can be used in the tests.
@@ -44,10 +41,7 @@ public class FilmControllerTest {
      */
     @Test
     public void htmlFilmOverviewShouldWork() throws Exception {
-        HtmlPage htmlPage;
-        try (final WebClient webClient = webAppContextSetup(webApplicationContext).build()) {
-            htmlPage = webClient.getPage("http://localhost:8080/films/overview");
-        }
+        HtmlPage htmlPage = localHostWebClient.getPage("http://localhost:8080/films/overview");
         HtmlElement bodyElement = htmlPage.getBody();
 
         HtmlElement filmName = getFirstHtmlElementsByItemprop(bodyElement, "filmname");
@@ -58,31 +52,27 @@ public class FilmControllerTest {
 
     @Test
     public void htmlFilmUploadFormIsCorrect() throws Exception {
-        HtmlPage htmlPage;
-        try (final WebClient webClient = new WebClient()) {
-            webClient.getOptions().setRedirectEnabled(true);
-            htmlPage = webClient.getPage("http://localhost:8080/films/addFilm");
+        HtmlPage htmlPage = localHostWebClient.getPage("http://localhost:8080/films/addFilm");
 
-            HtmlElement bodyElement = htmlPage.getBody();
+        HtmlElement bodyElement = htmlPage.getBody();
 
-            HtmlForm form = htmlPage.getForms().get(0);
-            HtmlInput filmTitleInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");
-            HtmlInput filmYearInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmyear");
-            HtmlFileInput fileInput = (HtmlFileInput) getFirstHtmlElementsByItemprop(bodyElement, "filmcover");
-            HtmlSubmitInput submitButton = form.getOneHtmlElementByAttribute("input", "type", "submit");
+        HtmlForm form = htmlPage.getForms().get(0);
+        HtmlInput filmTitleInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");
+        HtmlInput filmYearInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmyear");
+        HtmlFileInput fileInput = (HtmlFileInput) getFirstHtmlElementsByItemprop(bodyElement, "filmcover");
+        HtmlSubmitInput submitButton = form.getOneHtmlElementByAttribute("input", "type", "submit");
 
-            filmTitleInput.setValueAttribute("Pulp Fiction");
-            filmYearInput.setValueAttribute("1996");
-            fileInput.setData("abcdef".getBytes());
-            fileInput.setContentType("application/pdf");
-            HtmlPage redirectedPage = submitButton.click();
+        filmTitleInput.setValueAttribute("Pulp Fiction");
+        filmYearInput.setValueAttribute("1996");
+        fileInput.setValueAttribute("blahblah");
+        fileInput.setData("abcdef".getBytes());
+        fileInput.setContentType("application/pdf");
+        HtmlPage redirectedPage = submitButton.click();
 
-            bodyElement = redirectedPage.getBody();
+        bodyElement = redirectedPage.getBody();
 
-            HtmlElement filmNameElement = getFirstHtmlElementsByItemprop(bodyElement, "filmname");
-            assertThat(filmNameElement.getFirstChild().getNodeValue(), is(equalTo("Pulp Fiction-1996.jpg")));
-        }
-
+        HtmlElement filmNameElement = getFirstHtmlElementsByItemprop(bodyElement, "filmname");
+        assertThat(filmNameElement.getFirstChild().getNodeValue(), is(equalTo("Pulp Fiction-1996.jpg")));
     }
 
     // TODO: This test currently fails since the attributes for content negotiation are commented in application.properties.
