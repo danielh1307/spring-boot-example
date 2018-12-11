@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Here you can upload your film</title>
+    <meta charset="utf-8" />
+    <title>Film Upload</title>
 </head>
 <body>
-    <form action="/films/filmUpload" method="POST" enctype="multipart/form-data" itemprop="addFilmForm">
+    <form th:action="@{filmUpload}" method="POST" enctype="multipart/form-data">
         Titel:<br/>
         <input type="text" name="title" itemprop="filmtitle"/><br/>
         Jahr:<br/>
