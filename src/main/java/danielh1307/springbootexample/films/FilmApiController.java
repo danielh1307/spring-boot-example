@@ -1,14 +1,18 @@
 package danielh1307.springbootexample.films;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("/api/films")
-public class FilmRestController {
+@Api(description = "This is the API controller for film model")
+public class FilmApiController {
 
     @GetMapping("/default")
+    @ApiOperation("Returns just a single film (the default one) as string")
     public String getFilmAsString() {
         return "Pulp Fiction";
     }

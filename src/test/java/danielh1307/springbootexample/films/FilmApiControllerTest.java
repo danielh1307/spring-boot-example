@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
-public class FilmRestControllerTest {
+public class FilmApiControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
