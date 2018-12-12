@@ -59,11 +59,11 @@ public class FilmController {
 
     // Be aware to configure spring.servlet.multipart.max-file-size
     @PostMapping("/filmUpload")
-    public ModelAndView uploadFilm(FilmForm filmForm, @RequestParam MultipartFile cover, ModelMap modelMap) throws IOException  {
+    public ModelAndView uploadFilm(FilmForm filmForm, ModelMap modelMap) throws IOException  {
         LOGGER.info("Added new film: " + filmForm.getTitle() + ", " + filmForm.getYear());
-        LOGGER.info("And the content is: " + cover);
+//        LOGGER.info("And the content is: " + cover);
         String filename = filmForm.getTitle() + "-" + filmForm.getYear() + ".jpg";
-        saveFile(cover, filename);
+//        saveFile(cover, filename);
         // this data is passed as GET parameter to the new URL
         // in Thymeleaf, we can access it with ${param.filmname}
         modelMap.addAttribute("filmname", filename);

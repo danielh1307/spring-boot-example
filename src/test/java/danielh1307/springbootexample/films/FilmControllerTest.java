@@ -59,14 +59,14 @@ public class FilmControllerTest {
         HtmlForm form = htmlPage.getForms().get(0);
         HtmlInput filmTitleInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");
         HtmlInput filmYearInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmyear");
-        HtmlFileInput fileInput = (HtmlFileInput) getFirstHtmlElementsByItemprop(bodyElement, "filmcover");
+//        HtmlFileInput fileInput = (HtmlFileInput) getFirstHtmlElementsByItemprop(bodyElement, "filmcover");
         HtmlSubmitInput submitButton = form.getOneHtmlElementByAttribute("input", "type", "submit");
 
         filmTitleInput.setValueAttribute("Pulp Fiction");
         filmYearInput.setValueAttribute("1996");
-        fileInput.setValueAttribute("blahblah");
-        fileInput.setData("abcdef".getBytes());
-        fileInput.setContentType("application/pdf");
+//        fileInput.setValueAttribute("blahblah");
+//        fileInput.setData("abcdef".getBytes());
+//        fileInput.setContentType("application/pdf");
         HtmlPage redirectedPage = submitButton.click();
 
         bodyElement = redirectedPage.getBody();
