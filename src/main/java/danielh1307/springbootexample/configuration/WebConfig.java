@@ -3,6 +3,7 @@ package danielh1307.springbootexample.configuration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -53,5 +54,14 @@ public class WebConfig implements WebMvcConfigurer {
 //                .mediaType("xml", MediaType.APPLICATION_XML)
 //                .mediaType("json", MediaType.APPLICATION_JSON);
 //    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
 
 }
