@@ -33,7 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .favorParameter(true)
                 .parameterName("mediaType")
 //                .ignoreAcceptHeader(true)
-//                .defaultContentType(APPLICATION_JSON)
+                .defaultContentType(APPLICATION_JSON)
 //                .mediaType("xml", APPLICATION_XML)
 //                .mediaType("json", APPLICATION_JSON)
                 .mediaType("csv", new MediaType("text", "csv"));
