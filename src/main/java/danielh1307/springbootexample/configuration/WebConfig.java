@@ -1,10 +1,16 @@
 package danielh1307.springbootexample.configuration;
 
+import danielh1307.springbootexample.films.FilmCsvHttpMessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_XML;
@@ -13,6 +19,9 @@ import static org.springframework.http.MediaType.APPLICATION_XML;
 // the following annotation is IMPORTANT here if the imported Spring MVC configuration has to be changed
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private FilmCsvHttpMessageConverter filmCsvHttpMessageConverter;
 
     // use this setup for
     // ?mediaType=xml ==> XML
@@ -23,11 +32,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .favorPathExtension(false)
                 .favorParameter(true)
                 .parameterName("mediaType")
-                .ignoreAcceptHeader(true)
-                .useRegisteredExtensionsOnly(true)
-                .defaultContentType(APPLICATION_JSON)
-                .mediaType("xml", APPLICATION_XML)
-                .mediaType("json", APPLICATION_JSON);
+//                .ignoreAcceptHeader(true)
+//                .defaultContentType(APPLICATION_JSON)
+//                .mediaType("xml", APPLICATION_XML)
+//                .mediaType("json", APPLICATION_JSON)
+                .mediaType("csv", new MediaType("text", "csv"));
     }
 
     // use this setup for
@@ -64,4 +73,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(this.filmCsvHttpMessageConverter);
+    }
 }

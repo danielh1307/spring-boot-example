@@ -29,7 +29,7 @@ public class FilmApiController {
     // curl http://localhost:8080/api/films/1?mediaType=json ==> returns JSON value
     // curl http://localhost:8080/api/films/1?mediaType=xml ==> returns XML value
     // see WebConfig for the configuration
-    @GetMapping(value = "/{filmId}", produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
+    @GetMapping(value = "/{filmId}", produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "text/csv"})
     public Film getFilmAsModel(@PathVariable final String filmId) {
         return new Film("Pulp Fiction", 1996);
     }
