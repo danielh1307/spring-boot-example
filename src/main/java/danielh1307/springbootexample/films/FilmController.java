@@ -30,15 +30,7 @@ public class FilmController {
 
     private static final Logger LOGGER = getLogger(FilmController.class);
 
-    // we have a HtmlUnit test for this method
-    // curl http://localhost:8080/films/overview --> returns HTML
-    // ********************* The following is currently not working *************************************
-    // curl --header "Accept: text/csv" http://localhost:8080/films/overview --> returns CSV
-    // This works because we have the "view" FilmsCsvView which extends AbstractView
-    // Please note for this to work we need properties spring.mvc.content-negotiation.media-types.csv and
-    // spring.mvc.contentnegotiation.favor-parameter in application.properties
-    // **************************************************************************************************
-    @GetMapping("/overview")
+    @GetMapping(value = "/overview")
     public String overview(final Model model) {
         model.addAttribute("films", new Film("Pulp Fiction", 1996));
         // this only works if spring-boot-starter-thymeleaf is used
@@ -59,21 +51,21 @@ public class FilmController {
 
     // Be aware to configure spring.servlet.multipart.max-file-size
     @PostMapping("/filmUpload")
-    public ModelAndView uploadFilm(FilmForm filmForm, ModelMap modelMap) throws IOException  {
+    public ModelAndView uploadFilm(FilmForm filmForm, ModelMap modelMap) {
         LOGGER.info("Added new film: " + filmForm.getTitle() + ", " + filmForm.getYear());
 //        LOGGER.info("And the content is: " + cover);
         String filename = filmForm.getTitle() + "-" + filmForm.getYear() + ".jpg";
 //        saveFile(cover, filename);
         // this data is passed as GET parameter to the new URL
         // in Thymeleaf, we can access it with ${param.filmname}
-        modelMap.addAttribute("filmname", filename);
+        modelMap.addAttribute("filename", filename);
         return new ModelAndView("redirect:filmUploaded", modelMap);
     }
 
     private void saveFile(MultipartFile part, String filename) throws IOException {
         try(FileOutputStream fos = new FileOutputStream(new File(filename))) {
             InputStream is = part.getInputStream();
-            int read = 0;
+            int read;
             final byte[] bytes = new byte[1024];
             while((read = is.read(bytes)) != -1) {
                 fos.write(bytes, 0, read);

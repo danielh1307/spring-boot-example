@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@WebMvcTest(controllers = FilmApiController.class)
 public class FilmApiControllerTest {
 
     @Autowired
@@ -31,39 +31,31 @@ public class FilmApiControllerTest {
     }
 
     @Test
-    public void getFilmAsStringShouldWork() throws Exception {
+    public void getFilmTitle_withExistingFilm_correctFilmTitleIsReturned() throws Exception {
         this.mockMvc
-                .perform(get("/api/films/default"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Pulp Fiction"));
-    }
-
-    @Test
-    public void getFilmWithPathVariableShouldWork() throws Exception {
-        this.mockMvc
-                .perform(get("/api/films/number/2"))
+                .perform(get("/api/films/2/title"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Hateful 8"));
     }
 
     @Test
-    public void getUnknownFilmReturns404Error() throws Exception {
+    public void getFilmTitle_withMissingFilm_http404IsReturned() throws Exception {
         this.mockMvc
                 .perform(get("/api/films/number/4"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void getFilmAsJsonModelShouldWork() throws Exception {
+    public void getFilm_withExistingFilm_correctJsonIsReturned() throws Exception {
         // either with strings ...
         this.mockMvc
                 .perform(get("/api/films/1"))
                 .andExpect(status().isOk())
                 // content().json --> the attributes must not be in the same order
-                .andExpect(content().json("{\"year\": 1996, \"name\": \"Pulp Fiction\"}"));
+                .andExpect(content().json("{\"year\": 1994, \"title\": \"Pulp Fiction\"}"));
 
         // ... or with objects
-        Film expectedResultObject = new Film("Pulp Fiction", 1996);
+        Film expectedResultObject = new Film("Pulp Fiction", 1994);
         this.mockMvc
                 .perform(get("/api/films/1"))
                 .andExpect(status().isOk())
@@ -72,31 +64,80 @@ public class FilmApiControllerTest {
     }
 
     @Test
-    public void getFilmAsXmlModelShouldWork() throws Exception {
+    public void getFilm_withExistingFilmAndMediaTypeXml_correctXmlIsReturned() throws Exception {
         this.mockMvc
                 .perform(get("/api/films/1").param("mediaType", "xml"))
                 .andExpect(status().isOk())
-                .andExpect(content().xml("<Film><name>Pulp Fiction</name><year>1996</year></Film>"));
+                .andExpect(content().xml("<Film><title>Pulp Fiction</title><year>1994</year></Film>"));
     }
 
     @Test
-    public void getFilmWithRequestObjectShouldWork() throws Exception {
+    public void getFilm_withExistingFilmAndMediaTypeCsv_correctCsvIsReturned() throws Exception {
+        this.mockMvc
+                .perform(get("/api/films/2").param("mediaType", "csv"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Hateful 8,2014"));
+    }
+
+    @Test
+    public void getFilm_withExistingFilmAndJsonAcceptHeader_correctJsonIsReturned() throws Exception {
+        Film expectedResultObject = new Film("Pulp Fiction", 1994);
+        this.mockMvc
+                .perform(get("/api/films/1").accept("application/json"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(expectedResultObject)));
+    }
+
+    @Test
+    public void getFilm_withExistingFilmAndXmlAcceptHeader_correctXmlIsReturned() throws Exception {
+        this.mockMvc
+                .perform(get("/api/films/1").accept("application/xml"))
+                .andExpect(status().isOk())
+                .andExpect(content().xml("<Film><title>Pulp Fiction</title><year>1994</year></Film>"));
+    }
+
+    @Test
+    public void getFilm_withExistingFilmAndCsvAcceptHeader_correctCsvIsReturned() throws Exception {
+        this.mockMvc
+                .perform(get("/api/films/2").accept("text/csv"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Hateful 8,2014"));
+    }
+
+    @Test
+    public void getFilm_withMissingFilm_http404IsReturned() throws Exception {
+        this.mockMvc
+                .perform(get("/api/films/4"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void genericRequest_withExistingFilmKey_validJsonIsReturned() throws Exception {
         // either with strings ...
         this.mockMvc
-                .perform(post("/api/films/number/request")
+                .perform(post("/api/films/generic-request")
                         .contentType(APPLICATION_JSON)
-                        .content("{\"number\": 1}"))
+                        .content("{\"filmKey\": 1}"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"year\": 1996, \"name\": \"Pulp Fiction\"}"));
+                .andExpect(content().json("{\"year\": 1994, \"title\": \"Pulp Fiction\"}"));
 
         // ... or with objects
-        FilmRequest filmRequest = new FilmRequest(1);
-        Film expectedResultObject = new Film("Pulp Fiction", 1996);
+        FilmRequest filmRequest = new FilmRequest("1");
+        Film expectedResultObject = new Film("Pulp Fiction", 1994);
         this.mockMvc
-                .perform(post("/api/films/number/request")
+                .perform(post("/api/films/generic-request")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(filmRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(expectedResultObject)));
+    }
+
+    @Test
+    public void genericRequest_withMissingFilmKey_http404IsReturned() throws Exception {
+        this.mockMvc
+                .perform(post("/api/films/generic-request")
+                        .contentType(APPLICATION_JSON)
+                        .content("{\"filmKey\": 4}"))
+                .andExpect(status().isNotFound());
     }
 }

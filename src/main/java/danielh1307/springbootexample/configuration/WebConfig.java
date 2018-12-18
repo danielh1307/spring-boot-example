@@ -13,29 +13,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_XML;
 
 @Configuration
-// the following annotation is IMPORTANT here if the imported Spring MVC configuration has to be changed
-@EnableWebMvc
+@EnableWebMvc // this annotation disables automatic configuration of WebMVC
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private FilmCsvHttpMessageConverter filmCsvHttpMessageConverter;
 
     // use this setup for
-    // ?mediaType=xml ==> XML
-    // ?mediaType=json ==> JSON
+    // ?mediaType=xml / --header "Accept: application/xml" ==> XML
+    // ?mediaType=json / --header "Accept: application/json" ==> JSON
+    // ?mediaType=csv / --header "Accept: text/csv" ==> CSV
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer contentNegotiationConfigurer) {
         contentNegotiationConfigurer
                 .favorPathExtension(false)
                 .favorParameter(true)
                 .parameterName("mediaType")
-//                .ignoreAcceptHeader(true)
                 .defaultContentType(APPLICATION_JSON)
-//                .mediaType("xml", APPLICATION_XML)
-//                .mediaType("json", APPLICATION_JSON)
                 .mediaType("csv", new MediaType("text", "csv"));
     }
 

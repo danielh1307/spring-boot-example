@@ -21,11 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-// TODO: check why we need those settings here
-@WebMvcTest(
-        controllers = FilmController.class,
-        includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {FilmsCsvView.class})
-)
+@WebMvcTest(controllers = FilmController.class)
 public class FilmControllerTest {
 
     @Autowired
@@ -44,7 +40,7 @@ public class FilmControllerTest {
         HtmlPage htmlPage = localHostWebClient.getPage("http://localhost:8080/films/overview");
         HtmlElement bodyElement = htmlPage.getBody();
 
-        HtmlElement filmName = getFirstHtmlElementsByItemprop(bodyElement, "filmname");
+        HtmlElement filmName = getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");
         HtmlElement filmYear = getFirstHtmlElementsByItemprop(bodyElement, "filmyear");
         assertThat(filmName.getFirstChild().getNodeValue(), is(equalTo("Pulp Fiction")));
         assertThat(filmYear.getFirstChild().getNodeValue(), is(equalTo("1996")));
@@ -71,21 +67,8 @@ public class FilmControllerTest {
 
         bodyElement = redirectedPage.getBody();
 
-        HtmlElement filmNameElement = getFirstHtmlElementsByItemprop(bodyElement, "filmname");
-        assertThat(filmNameElement.getFirstChild().getNodeValue(), is(equalTo("Pulp Fiction-1996.jpg")));
-    }
-
-    // TODO: This test currently fails since the attributes for content negotiation are commented in application.properties.
-    // I am changing the ContentNegotiationConfigurer in WebConfig, and currently I do not know how to adjust it
-    // to have the same effect as the properties in application.properties.
-    @Test
-    @Ignore
-    public void csvViewShouldWork() throws Exception {
-        mockMvc
-                .perform(get("/films/overview").accept("text/csv"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("films"))
-                .andExpect(content().string("Pulp Fiction,1996"));
+        HtmlElement fileNameElement = getFirstHtmlElementsByItemprop(bodyElement, "filename");
+        assertThat(fileNameElement.getFirstChild().getNodeValue(), is(equalTo("Pulp Fiction-1996.jpg")));
     }
 
     private HtmlElement getFirstHtmlElementsByItemprop(HtmlElement htmlElement, String itemprop) {

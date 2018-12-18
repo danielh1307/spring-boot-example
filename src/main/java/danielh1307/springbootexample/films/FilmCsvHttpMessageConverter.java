@@ -20,7 +20,6 @@ public class FilmCsvHttpMessageConverter extends AbstractHttpMessageConverter<Fi
 
     public FilmCsvHttpMessageConverter() {
         super(new MediaType("text", "csv"));
-        LOGGER.info("I am created");
     }
 
     @Override
@@ -29,16 +28,15 @@ public class FilmCsvHttpMessageConverter extends AbstractHttpMessageConverter<Fi
     }
 
     @Override
-    protected Film readInternal(Class<? extends Film> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
-        LOGGER.info("readInternal called");
+    protected Film readInternal(Class<? extends Film> clazz, HttpInputMessage inputMessage) {
         return null;
     }
 
     @Override
     protected void writeInternal(Film film, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
-        LOGGER.info("writeInternal called");
         try (OutputStream outputStream = outputMessage.getBody()) {
-            outputStream.write("Hello".getBytes());
+            String outString = film.getTitle() + "," + film.getYear();
+            outputStream.write(outString.getBytes());
         }
     }
 }
