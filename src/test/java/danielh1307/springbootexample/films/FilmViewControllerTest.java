@@ -1,6 +1,7 @@
 package danielh1307.springbootexample.films;
 
 import com.gargoylesoftware.htmlunit.html.*;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,17 @@ public class FilmViewControllerTest {
         assertThat(filmYear.getFirstChild().getNodeValue(), is(equalTo("1996")));
     }
 
+    /**
+     * TODO
+     *
+     * Currently the problem seems to be a HtmlUnitMockHttpServletRequest is sent to the server. This class does not
+     * implement MultipartHttpServletRequest, so the mapping of the multipart cannot be done.
+     *
+     * If we test the same call with MockMvc, a MockMultipartHttpServletRequest is sent to the server and the fields
+     * are correct set.
+     */
     @Test
+    @Ignore("This test does only work as an integration test against an 'external' container, not as unit test")
     public void uploadFilm_formUpload_redirectsToCorrectPage() throws Exception {
         // arrange
         HtmlPage htmlPage = localHostWebClient.getPage("http://localhost:8080/films/addFilm");
