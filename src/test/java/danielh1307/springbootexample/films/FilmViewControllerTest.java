@@ -4,23 +4,19 @@ import com.gargoylesoftware.htmlunit.html.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.htmlunit.LocalHostWebClient;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static java.util.stream.StreamSupport.stream;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = FilmViewController.class)
+@SpringBootTest // test against "external container"
+//@WebMvcTest(controllers = FilmViewController.class)
 public class FilmViewControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
     private LocalHostWebClient localHostWebClient;
@@ -51,13 +47,12 @@ public class FilmViewControllerTest {
         HtmlForm form = htmlPage.getForms().get(0);
         HtmlInput filmTitleInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");
         HtmlInput filmYearInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmyear");
-//        HtmlFileInput fileInput = (HtmlFileInput) getFirstHtmlElementsByItemprop(bodyElement, "filmcover");
+        HtmlFileInput fileInput = (HtmlFileInput) getFirstHtmlElementsByItemprop(bodyElement, "filmcover");
         HtmlSubmitInput submitButton = form.getOneHtmlElementByAttribute("input", "type", "submit");
         filmTitleInput.setValueAttribute("Pulp Fiction");
         filmYearInput.setValueAttribute("1996");
-//        fileInput.setValueAttribute("blahblah");
-//        fileInput.setData("abcdef".getBytes());
-//        fileInput.setContentType("application/pdf");
+        String fileUrl = getClass().getClassLoader().getResource("test.txt").toExternalForm();
+        fileInput.setValueAttribute(fileUrl);
 
         // act
         HtmlPage redirectedPage = submitButton.click();
@@ -74,4 +69,5 @@ public class FilmViewControllerTest {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("HTML element with itemprop " + itemprop + " not found"));
     }
+
 }

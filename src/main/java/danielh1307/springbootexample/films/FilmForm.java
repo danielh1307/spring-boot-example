@@ -1,9 +1,20 @@
 package danielh1307.springbootexample.films;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class FilmForm {
 
     private String title;
     private int year;
+    private MultipartFile cover;
+
+    public MultipartFile getCover() {
+        return cover;
+    }
+
+    public void setCover(MultipartFile cover) {
+        this.cover = cover;
+    }
 
     public int getYear() {
         return year;

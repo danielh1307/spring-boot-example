@@ -6,11 +6,13 @@
     <title>Film Upload</title>
 </head>
 <body>
-    <form th:action="@{filmUpload}" method="POST">
+    <form th:action="@{filmUpload}" method="POST" enctype="multipart/form-data">
         Titel:<br/>
         <input type="text" name="title" itemprop="filmtitle"/><br/>
         Jahr:<br/>
         <input type="text" name="year" itemprop="filmyear"/><br/>
+        Cover:<br/>
+        <input type="file" name="cover" itemprop="filmcover"/><br/>
         <input type="submit" value="Abschicken" itemprop="submitbutton"/>
     </form>
 </body>
