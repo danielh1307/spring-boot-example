@@ -4,19 +4,27 @@ import com.gargoylesoftware.htmlunit.html.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.web.htmlunit.LocalHostWebClient;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.io.File;
 
 import static java.util.stream.StreamSupport.stream;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest // test against "external container"
-//@WebMvcTest(controllers = FilmViewController.class)
+//@SpringBootTest // test against "external container"
+@WebMvcTest(controllers = FilmViewController.class)
 public class FilmViewControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Autowired
     private LocalHostWebClient localHostWebClient;
@@ -40,7 +48,7 @@ public class FilmViewControllerTest {
     }
 
     @Test
-    public void uploadFilm_uploadFilmWithUploadForm_redirectedToCorrectPage() throws Exception {
+    public void uploadFilm_formUpload_redirectsToCorrectPage() throws Exception {
         // arrange
         HtmlPage htmlPage = localHostWebClient.getPage("http://localhost:8080/films/addFilm");
         HtmlElement bodyElement = htmlPage.getBody();
@@ -52,7 +60,7 @@ public class FilmViewControllerTest {
         filmTitleInput.setValueAttribute("Pulp Fiction");
         filmYearInput.setValueAttribute("1996");
         String fileUrl = getClass().getClassLoader().getResource("test.txt").toExternalForm();
-        fileInput.setValueAttribute(fileUrl);
+        fileInput.setFiles(new File(fileUrl));
 
         // act
         HtmlPage redirectedPage = submitButton.click();
@@ -61,6 +69,17 @@ public class FilmViewControllerTest {
         bodyElement = redirectedPage.getBody();
         HtmlElement fileNameElement = getFirstHtmlElementsByItemprop(bodyElement, "filename");
         assertThat(fileNameElement.getFirstChild().getNodeValue(), is(equalTo("Pulp Fiction-1996.jpg")));
+    }
+
+    @Test
+    public void uploadFilm_postCall_returnsCorrectRedirectedUrl() throws Exception {
+        this.mockMvc.
+                perform(multipart("/films/filmUpload")
+                        .file("cover", "123".getBytes())
+                        .param("title", "Pulp Fiction")
+                        .param("year", "1996")
+                )
+                .andExpect(redirectedUrl("filmUploaded?filename=Pulp+Fiction-1996.jpg"));
     }
 
     private HtmlElement getFirstHtmlElementsByItemprop(HtmlElement htmlElement, String itemprop) {
