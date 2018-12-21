@@ -15,8 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
-@ComponentScan
+@WebMvcTest(controllers = PropertiesController.class)
 public class PropertiesApplicationTest {
 
     @Autowired
