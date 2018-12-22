@@ -1,11 +1,15 @@
 package danielh1307.springbootexample.film.boundary;
 
 import danielh1307.springbootexample.film.domain.Film;
+import danielh1307.springbootexample.film.domain.FilmId;
 import danielh1307.springbootexample.film.domain.NoSuchFilmException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static danielh1307.springbootexample.film.domain.Film.newFilm;
+import static danielh1307.springbootexample.film.domain.FilmId.filmId;
 
 @Service
 public class FilmService {
@@ -14,8 +18,8 @@ public class FilmService {
 
     public FilmService() {
         filmMap = new HashMap<>();
-        filmMap.put("1", new Film("Pulp Fiction", 1994));
-        filmMap.put("2", new Film("Hateful 8", 2014));
+        filmMap.put("1", newFilm(filmId("1"),"Pulp Fiction", 1994));
+        filmMap.put("2", newFilm(filmId("2"),"Hateful 8", 2014));
     }
 
     public String getFilmTitle(final String filmId) throws NoSuchFilmException {

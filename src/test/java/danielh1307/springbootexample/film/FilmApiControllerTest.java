@@ -2,6 +2,7 @@ package danielh1307.springbootexample.film;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danielh1307.springbootexample.film.domain.Film;
+import danielh1307.springbootexample.film.domain.FilmId;
 import danielh1307.springbootexample.film.infrastructure.web.FilmApiController;
 import danielh1307.springbootexample.film.infrastructure.web.FilmRequest;
 import org.junit.Before;
@@ -15,6 +16,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static danielh1307.springbootexample.film.domain.Film.newFilm;
+import static danielh1307.springbootexample.film.domain.FilmId.filmId;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,10 +63,10 @@ public class FilmApiControllerTest {
                 .perform(get("/api/films/1"))
                 .andExpect(status().isOk())
                 // content().json --> the attributes must not be in the same order
-                .andExpect(content().json("{\"year\": 1994, \"title\": \"Pulp Fiction\"}"));
+                .andExpect(content().json("{\"id\":{\"value\":\"1\"},\"title\":\"Pulp Fiction\",\"year\":1994}"));
 
         // ... or with objects
-        Film expectedResultObject = new Film("Pulp Fiction", 1994);
+        Film expectedResultObject = newFilm(filmId("1"),"Pulp Fiction", 1994);
         this.mockMvc
                 .perform(get("/api/films/1"))
                 .andExpect(status().isOk())
@@ -76,7 +79,7 @@ public class FilmApiControllerTest {
         this.mockMvc
                 .perform(get("/api/films/1").param("mediaType", "xml"))
                 .andExpect(status().isOk())
-                .andExpect(content().xml("<Film><title>Pulp Fiction</title><year>1994</year></Film>"));
+                .andExpect(content().xml("<Film><id><value>1</value></id><title>Pulp Fiction</title><year>1994</year></Film>"));
     }
 
     @Test
@@ -89,7 +92,7 @@ public class FilmApiControllerTest {
 
     @Test
     public void getFilm_withExistingFilmAndJsonAcceptHeader_correctJsonIsReturned() throws Exception {
-        Film expectedResultObject = new Film("Pulp Fiction", 1994);
+        Film expectedResultObject = newFilm(filmId("1"),"Pulp Fiction", 1994);
         this.mockMvc
                 .perform(get("/api/films/1").accept("application/json"))
                 .andExpect(status().isOk())
@@ -101,7 +104,7 @@ public class FilmApiControllerTest {
         this.mockMvc
                 .perform(get("/api/films/1").accept("application/xml"))
                 .andExpect(status().isOk())
-                .andExpect(content().xml("<Film><title>Pulp Fiction</title><year>1994</year></Film>"));
+                .andExpect(content().xml("<Film><id><value>1</value></id><title>Pulp Fiction</title><year>1994</year></Film>"));
     }
 
     @Test
@@ -127,11 +130,11 @@ public class FilmApiControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content("{\"filmKey\": 1}"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"year\": 1994, \"title\": \"Pulp Fiction\"}"));
+                .andExpect(content().json("{\"id\":{\"value\":\"1\"},\"title\":\"Pulp Fiction\",\"year\":1994}"));
 
         // ... or with objects
         FilmRequest filmRequest = new FilmRequest("1");
-        Film expectedResultObject = new Film("Pulp Fiction", 1994);
+        Film expectedResultObject = newFilm(filmId("1"),"Pulp Fiction", 1994);
         this.mockMvc
                 .perform(post("/api/films/generic-request")
                         .contentType(APPLICATION_JSON)
