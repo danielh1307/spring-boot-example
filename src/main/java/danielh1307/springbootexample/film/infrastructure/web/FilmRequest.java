@@ -1,4 +1,4 @@
-package danielh1307.springbootexample.films;
+package danielh1307.springbootexample.film.infrastructure.web;
 
 public class FilmRequest {
 
@@ -7,7 +7,7 @@ public class FilmRequest {
     // this default constructor is needed, otherwise an object cannot be created from the request
     public FilmRequest() {}
 
-    FilmRequest(String filmKey) {
+    public FilmRequest(String filmKey) {
         this.filmKey = filmKey;
     }
 

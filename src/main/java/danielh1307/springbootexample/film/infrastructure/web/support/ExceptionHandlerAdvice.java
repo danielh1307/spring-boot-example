@@ -1,6 +1,6 @@
-package danielh1307.springbootexample;
+package danielh1307.springbootexample.film.infrastructure.web.support;
 
-import danielh1307.springbootexample.films.NoSuchFilmException;
+import danielh1307.springbootexample.film.domain.NoSuchFilmException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 // This class handles exceptions for all @Controller classes (e.g. NoSuchFilmException)
 // The exception class itself is free from framework code
 @ControllerAdvice
-public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler {
+public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = NoSuchFilmException.class)
     ResponseEntity<Object> handleNoSuchFilmException(NoSuchFilmException noSuchFilmException, WebRequest webRequest) {

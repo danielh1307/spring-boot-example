@@ -1,4 +1,4 @@
-package danielh1307.springbootexample.films;
+package danielh1307.springbootexample.film.domain;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -1,6 +1,6 @@
-package danielh1307.springbootexample.configuration;
+package danielh1307.springbootexample.film.config;
 
-import danielh1307.springbootexample.films.FilmCsvHttpMessageConverter;
+import danielh1307.springbootexample.film.infrastructure.web.FilmCsvHttpMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;

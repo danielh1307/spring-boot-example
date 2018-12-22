@@ -1,5 +1,6 @@
-package danielh1307.springbootexample.films;
+package danielh1307.springbootexample.film.infrastructure.web;
 
+import danielh1307.springbootexample.film.domain.Film;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

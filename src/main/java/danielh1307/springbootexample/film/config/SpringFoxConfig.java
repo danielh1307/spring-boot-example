@@ -1,4 +1,4 @@
-package danielh1307.springbootexample.configuration;
+package danielh1307.springbootexample.film.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

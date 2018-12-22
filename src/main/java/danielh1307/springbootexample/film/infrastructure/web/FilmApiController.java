@@ -1,7 +1,11 @@
-package danielh1307.springbootexample.films;
+package danielh1307.springbootexample.film.infrastructure.web;
 
+import danielh1307.springbootexample.film.boundary.FilmService;
+import danielh1307.springbootexample.film.domain.NoSuchFilmException;
+import danielh1307.springbootexample.film.domain.Film;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -14,18 +18,16 @@ import static org.springframework.http.MediaType.*;
 @Api(description = "This is the API controller for film model")
 public class FilmApiController {
 
-    private Map<String, Film> filmMap;
+    private FilmService filmService;
 
-    public FilmApiController() {
-        filmMap = new HashMap<>();
-        filmMap.put("1", new Film("Pulp Fiction", 1994));
-        filmMap.put("2", new Film("Hateful 8", 2014));
+    FilmApiController(FilmService filmService) {
+        this.filmService = filmService;
     }
 
     @GetMapping("/films/{filmId}/title")
     @ApiOperation("Returns the title of a specific film as String")
     public String getFilmTitle(@PathVariable final String filmId) throws NoSuchFilmException {
-        return film(filmId).getTitle();
+        return filmService.getFilmTitle(filmId);
     }
 
     // curl http://localhost:8080/api/films/1?mediaType=json ==> returns JSON value
@@ -35,7 +37,7 @@ public class FilmApiController {
     @GetMapping(value = "/films/{filmId}", produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "text/csv"})
     @ApiOperation("Returns the requested film either as JSON, XML or CSV (depending on accept header or parameter mediaType)")
     public Film getFilm(@PathVariable final String filmId) throws NoSuchFilmException {
-        return film(filmId);
+        return filmService.getFilm(filmId);
     }
 
     // here we can send the request as JSON, thanks to @RequestBody
@@ -43,13 +45,8 @@ public class FilmApiController {
     @PostMapping(value = "/films/generic-request", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiOperation("Returns the requested film as JSON")
     public Film genericRequest(@RequestBody final FilmRequest filmRequest) throws NoSuchFilmException {
-        return film(filmRequest.getFilmKey());
+        return filmService.getFilm(filmRequest.getFilmKey());
     }
 
-    private Film film(String filmKey) throws NoSuchFilmException {
-        return filmMap.entrySet().stream()
-                .filter(entry -> entry.getKey().equals(filmKey))
-                .map(Map.Entry::getValue).findFirst()
-                .orElseThrow(NoSuchFilmException::new);
-    }
+
 }

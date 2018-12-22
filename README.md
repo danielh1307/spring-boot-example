@@ -1,5 +1,12 @@
 # Spring Boot Example
 
+## Package structure
+
+ * `config` - all Spring Boot configuration files.
+ * `domain` - contains domain objects. This package must not have a dependency to any class outside this package.
+ * `boundary` - contains the application layer, the "use cases" of the application. Has dependencies to the `domain` package but not to `infrastructure`. 
+ * `infrastructure` - contains infrastructure objects (e.g. `@Controller` classes.) Calls services from the `boundary` but not the `domain` objects directly.
+
 ## Maven commands
 
 Use

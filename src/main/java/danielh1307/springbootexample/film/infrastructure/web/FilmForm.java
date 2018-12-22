@@ -1,4 +1,4 @@
-package danielh1307.springbootexample.films;
+package danielh1307.springbootexample.film.infrastructure.web;
 
 import org.springframework.web.multipart.MultipartFile;
 
