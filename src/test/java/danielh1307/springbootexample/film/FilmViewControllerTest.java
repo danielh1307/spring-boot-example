@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
 @RunWith(SpringRunner.class)
-//@SpringBootTest // test against "external container"
 @WebMvcTest(controllers = FilmViewController.class)
 public class FilmViewControllerTest {
 
