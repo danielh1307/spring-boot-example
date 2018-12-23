@@ -45,12 +45,16 @@ $> java -jar target/spring-boot-example.jar
 
 ### Start with a different profile
 
-TODO
-
+```bash
+$> ./mvnw spring-boot:run -Dspring-boot.run.profiles=<PROFILE> # with maven
+$> java -jar target/spring-boot-example.jar --spring.profiles.active=dev # as .jar file
+```
 ## Call a service
 
 `curl -X GET http://localhost:8080/hello?title=World`
 
 ## Swagger
 
-TODO
+```bash
+$> curl http://localhost:8080/v2/api-docs # as JSON
+$> curl http://localhost:8080/swagger-ui.html # as HTML
