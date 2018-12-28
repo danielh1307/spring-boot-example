@@ -1,7 +1,6 @@
 package danielh1307.springbootexample.film.boundary;
 
 import danielh1307.springbootexample.film.domain.Film;
-import danielh1307.springbootexample.film.domain.FilmId;
 import danielh1307.springbootexample.film.domain.NoSuchFilmException;
 import org.springframework.stereotype.Service;
 
