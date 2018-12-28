@@ -49,6 +49,33 @@ $> java -jar target/spring-boot-example.jar
 $> ./mvnw spring-boot:run -Dspring-boot.run.profiles=<PROFILE> # with maven
 $> java -jar target/spring-boot-example.jar --spring.profiles.active=dev # as .jar file
 ```
+
+### Pass arguments
+
+For this to work, SpringApplication.setAddCommandLineProperties() must be TRUE (which is the default):
+
+```bash
+$> ./mvnw spring-boot:run -Dspring-boot.run.arguments=--myProperty="different value" # with maven
+$> java -jar target/spring-boot-example.jar --myProperty="different value" # as .jar file
+```
+
+Of course you can also set a system property:
+
+If you use the Spring Boot Maven plugin, add the following to the configuration of the plugin:
+
+```xml
+<configuration>
+	<systemPropertyVariables>
+		<myProperty>different value</myProperty>
+	</systemPropertyVariables>
+</configuration>
+```
+
+If you start the .jar file directly:
+
+```bash
+$> java -DmyProperty="different value" -jar target/spring-boot-example.jar # as .jar file
+
 ## Call a service
 
 `curl -X GET http://localhost:8080/hello?title=World`
