@@ -1,0 +1,2 @@
+CREATE TABLE person (vorname VARCHAR2(30), name VARCHAR2(30));
+INSERT INTO PERSON VALUES ('Hugo', 'Flyway');

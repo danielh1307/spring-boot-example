@@ -53,7 +53,7 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<!-- if application is stared with java -jar, the devtools are not active -->
+			<!-- if application is started with java -jar, the devtools are not active -->
 			<!-- to apply the changes, in IntelliJ the project must be built (Build -> Build Project or COMMAND + F9) -->
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -72,6 +72,25 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
+		</dependency>
+
+		<!-- Database dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<!-- h2 console: http://localhost:8080/h2-console/ -->
+		<!-- console is only active if devtools are active, that means it does not work if application is started with java -jar -->
+		<!-- if you want to force the console, start with property spring.h2.console.enabled=true -->
+		<!-- default database URL is jdbc:h2:mem:testdb -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
 		</dependency>
 
 		<!-- webjars -->

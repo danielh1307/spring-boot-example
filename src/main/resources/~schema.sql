@@ -1,0 +1,3 @@
+-- DataSourceInitializer is available with spring-boot-starter-jdbc
+-- it delegates the work to DatabasePopulator, which uses scripts called schema.sql and data.sql
+-- CREATE TABLE person (vorname VARCHAR2(30), name VARCHAR2(30));
