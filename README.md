@@ -52,7 +52,7 @@ $> java -jar target/spring-boot-example.jar --spring.profiles.active=dev # as .j
 
 ### Pass arguments
 
-For this to work, SpringApplication.setAddCommandLineProperties() must be TRUE (which is the default):
+For this to work, `SpringApplication.setAddCommandLineProperties()` must be `true` (which is the default):
 
 ```bash
 $> ./mvnw spring-boot:run -Dspring-boot.run.arguments=--myProperty="different value" # with maven
@@ -75,6 +75,7 @@ If you start the .jar file directly:
 
 ```bash
 $> java -DmyProperty="different value" -jar target/spring-boot-example.jar # as .jar file
+```
 
 ## Call a service
 
