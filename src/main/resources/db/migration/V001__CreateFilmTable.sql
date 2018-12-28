@@ -1,0 +1,5 @@
+CREATE TABLE film (
+    id VARCHAR NOT NULL PRIMARY KEY,
+    title VARCHAR NOT NULL,
+    year INT NOT NULL
+);

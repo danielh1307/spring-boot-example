@@ -2,22 +2,21 @@ package danielh1307.springbootexample.film;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danielh1307.springbootexample.film.domain.Film;
-import danielh1307.springbootexample.film.domain.FilmId;
+import danielh1307.springbootexample.film.infrastructure.persistence.JdbcFilmRepository;
 import danielh1307.springbootexample.film.infrastructure.web.FilmApiController;
 import danielh1307.springbootexample.film.infrastructure.web.FilmRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static danielh1307.springbootexample.film.domain.Film.newFilm;
 import static danielh1307.springbootexample.film.domain.FilmId.filmId;
+import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,7 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = FilmApiController.class)
 // since we are using other beans (FilmService in this case) we have to perform a @ComponentScan
 // alternatively we could use @SpringBootTest (which loads full application context) and @AutoConfigureMockMvc
-@ComponentScan(basePackages = "danielh1307.springbootexample.film.boundary")
+@ComponentScan(
+        basePackages = {"danielh1307.springbootexample.film.boundary", "danielh1307.springbootexample.film"},
+        // JdbcFilmRepository is in the same package as TestFilmRepository, therefore we have to exclude it
+        excludeFilters = @ComponentScan.Filter(type = ASSIGNABLE_TYPE, classes = JdbcFilmRepository.class))
 public class FilmApiControllerTest {
 
     @Autowired

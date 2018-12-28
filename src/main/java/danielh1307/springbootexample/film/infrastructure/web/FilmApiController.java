@@ -1,17 +1,15 @@
 package danielh1307.springbootexample.film.infrastructure.web;
 
 import danielh1307.springbootexample.film.boundary.FilmService;
-import danielh1307.springbootexample.film.domain.NoSuchFilmException;
 import danielh1307.springbootexample.film.domain.Film;
+import danielh1307.springbootexample.film.domain.NoSuchFilmException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.springframework.http.MediaType.*;
+import static danielh1307.springbootexample.film.domain.FilmId.filmId;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
 @RestController
 @RequestMapping("/api")
@@ -27,7 +25,7 @@ public class FilmApiController {
     @GetMapping("/films/{filmId}/title")
     @ApiOperation("Returns the title of a specific film as String")
     public String getFilmTitle(@PathVariable final String filmId) throws NoSuchFilmException {
-        return filmService.getFilmTitle(filmId);
+        return filmService.getFilmTitle(filmId(filmId));
     }
 
     // curl http://localhost:8080/api/films/1?mediaType=json ==> returns JSON value
@@ -37,7 +35,7 @@ public class FilmApiController {
     @GetMapping(value = "/films/{filmId}", produces = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE, "text/csv"})
     @ApiOperation("Returns the requested film either as JSON, XML or CSV (depending on accept header or parameter mediaType)")
     public Film getFilm(@PathVariable final String filmId) throws NoSuchFilmException {
-        return filmService.getFilm(filmId);
+        return filmService.getFilm(filmId(filmId));
     }
 
     // here we can send the request as JSON, thanks to @RequestBody
@@ -45,7 +43,7 @@ public class FilmApiController {
     @PostMapping(value = "/films/generic-request", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiOperation("Returns the requested film as JSON")
     public Film genericRequest(@RequestBody final FilmRequest filmRequest) throws NoSuchFilmException {
-        return filmService.getFilm(filmRequest.getFilmKey());
+        return filmService.getFilm(filmId(filmRequest.getFilmKey()));
     }
 
 
