@@ -25,6 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // since we are using other beans (FilmService in this case) we have to perform a @ComponentScan
 // alternatively we could use @SpringBootTest (which loads full application context) and @AutoConfigureMockMvc
 @ComponentScan(basePackages = "danielh1307.springbootexample.film.boundary")
+// This is just a @WebMvcTest so we do not have the full application context.
+// Since there is no FilmRepository (needed by FilmService), we are using a "test configuration" for it.
+// For a real mock, see FilmServiceTest.
 @Import(TestFilmRepository.class)
 public class FilmApiControllerWithTestFilmRepositoryTest {
 
