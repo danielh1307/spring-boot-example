@@ -1,4 +1,4 @@
-package danielh1307.springbootexample.film;
+package danielh1307.springbootexample.film.infrastructure.web;
 
 import danielh1307.springbootexample.film.domain.Film;
 import danielh1307.springbootexample.film.domain.FilmId;

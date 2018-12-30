@@ -1,9 +1,7 @@
-package danielh1307.springbootexample.film;
+package danielh1307.springbootexample.film.infrastructure.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danielh1307.springbootexample.film.domain.Film;
-import danielh1307.springbootexample.film.infrastructure.web.FilmApiController;
-import danielh1307.springbootexample.film.infrastructure.web.FilmRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
