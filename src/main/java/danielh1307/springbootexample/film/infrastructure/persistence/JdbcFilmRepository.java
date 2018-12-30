@@ -4,6 +4,7 @@ import danielh1307.springbootexample.film.domain.Film;
 import danielh1307.springbootexample.film.domain.FilmId;
 import danielh1307.springbootexample.film.domain.FilmRepository;
 import danielh1307.springbootexample.film.domain.NoSuchFilmException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -31,13 +32,16 @@ public class JdbcFilmRepository implements FilmRepository {
     @Override
     public Film getFilm(FilmId filmId) throws NoSuchFilmException {
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource("id", filmId.getValue());
-        return this.jdbcTemplate.queryForObject(
-                "SELECT id, title, year FROM film where id = :id",
-                sqlParameterSource,
-                (rs, rowNum) -> newFilm(filmId(rs.getString("id")),
-                        rs.getString("title"),
-                        rs.getInt("year")));
-        // TODO: throw exception if film is not found
+        try {
+            return this.jdbcTemplate.queryForObject(
+                    "SELECT id, title, year FROM film where id = :id",
+                    sqlParameterSource,
+                    (rs, rowNum) -> newFilm(filmId(rs.getString("id")),
+                            rs.getString("title"),
+                            rs.getInt("year")));
+        } catch (EmptyResultDataAccessException ex) {
+            throw new NoSuchFilmException();
+        }
     }
 
     @Override
