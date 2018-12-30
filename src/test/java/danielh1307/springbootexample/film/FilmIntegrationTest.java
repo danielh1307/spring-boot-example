@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+// Test data for this test is loaded in test/resources flyway scripts
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FilmIntegrationTest {
