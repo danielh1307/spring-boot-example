@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import static danielh1307.springbootexample.film.domain.Film.newFilmWithId;
+import static danielh1307.springbootexample.film.infrastructure.support.FilmCreator.createFilm;
 
 // @Repository translates checked (infrastructure) exceptions to runtime exceptions
 @Repository
@@ -35,8 +35,8 @@ public class JdbcFilmRepository implements FilmRepository {
             return this.jdbcTemplate.queryForObject(
                     "SELECT id, title, year FROM film where id = :id",
                     sqlParameterSource,
-                    // TODO: here we should not "create" a new object since this should only being created in the Service
-                    (rs, rowNum) -> newFilmWithId(rs.getString("id"),
+                    // we are not calling the constructor here since this should only be done in the Service
+                    (rs, rowNum) -> createFilm(rs.getString("id"),
                             rs.getString("title"),
                             rs.getInt("year")));
         } catch (EmptyResultDataAccessException ex) {
