@@ -1,7 +1,5 @@
 package danielh1307.springbootexample.film.infrastructure.web;
 
-import danielh1307.springbootexample.film.domain.Film;
-import danielh1307.springbootexample.film.domain.FilmId;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static danielh1307.springbootexample.film.domain.Film.newFilmWithId;
 import static org.slf4j.LoggerFactory.getLogger;
 
 // We are using @Controller instead of @RestController here
@@ -32,7 +31,7 @@ public class FilmViewController {
 
     @GetMapping(value = "/overview")
     public String getOverview(final Model model) {
-        model.addAttribute("films", Film.newFilm(FilmId.filmId("1"),"Pulp Fiction", 1996));
+        model.addAttribute("films", newFilmWithId("1","Pulp Fiction", 1996));
         // this only works if spring-boot-starter-thymeleaf is used
         // otherwise I had 404 errors because there were no associated views
         // I guess spring-boot-starter-thymeleaf configures specific view resolvers so this works

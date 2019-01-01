@@ -1,8 +1,6 @@
 package danielh1307.springbootexample.film.boundary;
 
-import danielh1307.springbootexample.film.boundary.FilmService;
 import danielh1307.springbootexample.film.domain.Film;
-import danielh1307.springbootexample.film.domain.FilmId;
 import danielh1307.springbootexample.film.domain.FilmRepository;
 import danielh1307.springbootexample.film.domain.NoSuchFilmException;
 import org.junit.Before;
@@ -18,7 +16,8 @@ import static danielh1307.springbootexample.film.domain.FilmId.filmId;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 public class FilmServiceTest {
@@ -33,18 +32,17 @@ public class FilmServiceTest {
 
     @Before
     public void initialize() {
-        filmService = new FilmService(filmRepository);
+        this.filmService = new FilmService(this.filmRepository);
     }
 
     @Test
     public void getFilmTitle_withExistingFilm_correctTitleIsReturned() throws NoSuchFilmException {
         // arrange
-        FilmId pulpFictionId = filmId("1");
-        Film pulpFiction = newFilm(filmId("1"), "Pulp Fiction", 1994);
-        when(filmRepository.getFilm(pulpFictionId)).thenReturn(pulpFiction);
+        Film pulpFiction = newFilm("Pulp Fiction", 1994);
+        when(this.filmRepository.getFilm(pulpFiction.getId())).thenReturn(pulpFiction);
 
         // act
-        String filmTitle = filmService.getFilmTitle(pulpFictionId);
+        String filmTitle = this.filmService.getFilmTitle(pulpFiction.getId());
 
         // assert
         assertThat(filmTitle, is(equalTo("Pulp Fiction")));
@@ -53,12 +51,11 @@ public class FilmServiceTest {
     @Test
     public void getFilm_withExistingFilm_correctFilmIsReturned() throws NoSuchFilmException {
         // arrange
-        FilmId pulpFictionId = filmId("1");
-        Film pulpFiction = newFilm(filmId("1"), "Pulp Fiction", 1994);
-        when(filmRepository.getFilm(pulpFictionId)).thenReturn(pulpFiction);
+        Film pulpFiction = newFilm("Pulp Fiction", 1994);
+        when(this.filmRepository.getFilm(pulpFiction.getId())).thenReturn(pulpFiction);
 
         // act
-        Film film = filmService.getFilm(pulpFictionId);
+        Film film = this.filmService.getFilm(pulpFiction.getId());
 
         // assert
         assertThat(film.getId(), is(equalTo(pulpFiction.getId())));
@@ -69,11 +66,20 @@ public class FilmServiceTest {
     @Test
     public void getFilm_withMissingFilm_noSuchFilmExceptionIsThrown() throws NoSuchFilmException {
         // arrange
-        when(filmRepository.getFilm(filmId("1"))).thenThrow(NoSuchFilmException.class);
+        when(this.filmRepository.getFilm(filmId("1"))).thenThrow(NoSuchFilmException.class);
 
         // act + assert
-        expectedException.expect(NoSuchFilmException.class);
-        filmService.getFilm(filmId("1"));
+        this.expectedException.expect(NoSuchFilmException.class);
+        this.filmService.getFilm(filmId("1"));
+    }
+
+    @Test
+    public void addFilm_addNewFilm_testFilmWasAdded() {
+        // act
+        this.filmService.addFilm("Reservoir Dogs", 1992);
+
+        // assert
+        verify(this.filmRepository, times(1)).addFilm(any());
     }
 
 }

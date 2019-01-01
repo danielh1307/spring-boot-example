@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static danielh1307.springbootexample.film.domain.Film.newFilm;
-import static danielh1307.springbootexample.film.domain.FilmId.filmId;
+import static danielh1307.springbootexample.film.domain.Film.newFilmWithId;
+import static danielh1307.springbootexample.film.infrastructure.web.TestFilmRepository.PULP_FICTION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,7 +38,7 @@ public class FilmApiControllerWithTestFilmRepositoryTest {
 
     @Before
     public void init() {
-        objectMapper = new ObjectMapper();
+        this.objectMapper = new ObjectMapper();
     }
 
     @Test
@@ -66,12 +66,12 @@ public class FilmApiControllerWithTestFilmRepositoryTest {
                 .andExpect(content().json("{\"id\":{\"value\":\"1\"},\"title\":\"Pulp Fiction\",\"year\":1994}"));
 
         // ... or with objects
-        Film expectedResultObject = newFilm(filmId("1"),"Pulp Fiction", 1994);
+        Film expectedResultObject = PULP_FICTION;
         this.mockMvc
-                .perform(get("/api/films/1"))
+                .perform(get("/api/films/" + expectedResultObject.getId().getValue()))
                 .andExpect(status().isOk())
                 // content().json --> the attributes must not be in the same order
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResultObject)));
+                .andExpect(content().json(this.objectMapper.writeValueAsString(expectedResultObject)));
     }
 
     @Test
@@ -92,11 +92,11 @@ public class FilmApiControllerWithTestFilmRepositoryTest {
 
     @Test
     public void getFilm_withExistingFilmAndJsonAcceptHeader_correctJsonIsReturned() throws Exception {
-        Film expectedResultObject = newFilm(filmId("1"),"Pulp Fiction", 1994);
+        Film expectedResultObject = PULP_FICTION;
         this.mockMvc
-                .perform(get("/api/films/1").accept("application/json"))
+                .perform(get("/api/films/" + expectedResultObject.getId().getValue()).accept("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResultObject)));
+                .andExpect(content().json(this.objectMapper.writeValueAsString(expectedResultObject)));
     }
 
     @Test
@@ -134,13 +134,13 @@ public class FilmApiControllerWithTestFilmRepositoryTest {
 
         // ... or with objects
         FilmRequest filmRequest = new FilmRequest("1");
-        Film expectedResultObject = newFilm(filmId("1"),"Pulp Fiction", 1994);
+        Film expectedResultObject = newFilmWithId("1","Pulp Fiction", 1994);
         this.mockMvc
                 .perform(post("/api/films/generic-request")
                         .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(filmRequest)))
+                        .content(this.objectMapper.writeValueAsBytes(filmRequest)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResultObject)));
+                .andExpect(content().json(this.objectMapper.writeValueAsString(expectedResultObject)));
     }
 
     @Test

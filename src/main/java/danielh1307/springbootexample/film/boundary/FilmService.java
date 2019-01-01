@@ -6,6 +6,8 @@ import danielh1307.springbootexample.film.domain.FilmRepository;
 import danielh1307.springbootexample.film.domain.NoSuchFilmException;
 import org.springframework.stereotype.Service;
 
+import static danielh1307.springbootexample.film.domain.Film.newFilm;
+
 @Service
 public class FilmService {
 
@@ -23,7 +25,15 @@ public class FilmService {
         return film(filmId);
     }
 
+    public Film addFilm(final String title, final int year) {
+        Film film = newFilm(title, year);
+
+        this.filmRepository.addFilm(film);
+
+        return film;
+    }
+
     private Film film(FilmId filmId) throws NoSuchFilmException {
-        return filmRepository.getFilm(filmId);
+        return this.filmRepository.getFilm(filmId);
     }
 }
