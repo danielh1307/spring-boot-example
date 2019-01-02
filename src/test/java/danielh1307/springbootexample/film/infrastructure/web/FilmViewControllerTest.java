@@ -1,4 +1,4 @@
-package danielh1307.springbootexample.film;
+package danielh1307.springbootexample.film.infrastructure.web;
 
 import com.gargoylesoftware.htmlunit.html.*;
 import danielh1307.springbootexample.film.infrastructure.web.FilmViewController;
@@ -38,7 +38,7 @@ public class FilmViewControllerTest {
     @Test
     public void getOverview_requestHtmlOverview_htmlOverviewReturned() throws Exception {
         // act
-        HtmlPage htmlPage = localHostWebClient.getPage("http://localhost:8080/films/overview");
+        HtmlPage htmlPage = this.localHostWebClient.getPage("http://localhost:8080/films/overview");
         HtmlElement bodyElement = htmlPage.getBody();
         HtmlElement filmName = getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");
         HtmlElement filmYear = getFirstHtmlElementsByItemprop(bodyElement, "filmyear");
@@ -61,7 +61,7 @@ public class FilmViewControllerTest {
     @Ignore("This test does only work as an integration test against an 'external' container, not as unit test")
     public void uploadFilm_formUpload_redirectsToCorrectPage() throws Exception {
         // arrange
-        HtmlPage htmlPage = localHostWebClient.getPage("http://localhost:8080/films/addFilm");
+        HtmlPage htmlPage = this.localHostWebClient.getPage("http://localhost:8080/films/addFilm");
         HtmlElement bodyElement = htmlPage.getBody();
         HtmlForm form = htmlPage.getForms().get(0);
         HtmlInput filmTitleInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");

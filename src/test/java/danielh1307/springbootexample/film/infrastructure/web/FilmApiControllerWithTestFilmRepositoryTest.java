@@ -1,23 +1,19 @@
-package danielh1307.springbootexample.film;
+package danielh1307.springbootexample.film.infrastructure.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danielh1307.springbootexample.film.domain.Film;
-import danielh1307.springbootexample.film.domain.FilmId;
-import danielh1307.springbootexample.film.infrastructure.web.FilmApiController;
-import danielh1307.springbootexample.film.infrastructure.web.FilmRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static danielh1307.springbootexample.film.domain.Film.newFilm;
-import static danielh1307.springbootexample.film.domain.FilmId.filmId;
+import static danielh1307.springbootexample.film.domain.Film.newFilmWithId;
+import static danielh1307.springbootexample.film.infrastructure.web.TestFilmRepository.PULP_FICTION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,7 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // since we are using other beans (FilmService in this case) we have to perform a @ComponentScan
 // alternatively we could use @SpringBootTest (which loads full application context) and @AutoConfigureMockMvc
 @ComponentScan(basePackages = "danielh1307.springbootexample.film.boundary")
-public class FilmApiControllerTest {
+// This is just a @WebMvcTest so we do not have the full application context.
+// Since there is no FilmRepository (needed by FilmService), we are using a "test configuration" for it.
+// For a real mock, see FilmServiceTest.
+@Import(TestFilmRepository.class)
+public class FilmApiControllerWithTestFilmRepositoryTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,7 +38,7 @@ public class FilmApiControllerTest {
 
     @Before
     public void init() {
-        objectMapper = new ObjectMapper();
+        this.objectMapper = new ObjectMapper();
     }
 
     @Test
@@ -66,12 +66,12 @@ public class FilmApiControllerTest {
                 .andExpect(content().json("{\"id\":{\"value\":\"1\"},\"title\":\"Pulp Fiction\",\"year\":1994}"));
 
         // ... or with objects
-        Film expectedResultObject = newFilm(filmId("1"),"Pulp Fiction", 1994);
+        Film expectedResultObject = PULP_FICTION;
         this.mockMvc
-                .perform(get("/api/films/1"))
+                .perform(get("/api/films/" + expectedResultObject.getId().getValue()))
                 .andExpect(status().isOk())
                 // content().json --> the attributes must not be in the same order
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResultObject)));
+                .andExpect(content().json(this.objectMapper.writeValueAsString(expectedResultObject)));
     }
 
     @Test
@@ -92,11 +92,11 @@ public class FilmApiControllerTest {
 
     @Test
     public void getFilm_withExistingFilmAndJsonAcceptHeader_correctJsonIsReturned() throws Exception {
-        Film expectedResultObject = newFilm(filmId("1"),"Pulp Fiction", 1994);
+        Film expectedResultObject = PULP_FICTION;
         this.mockMvc
-                .perform(get("/api/films/1").accept("application/json"))
+                .perform(get("/api/films/" + expectedResultObject.getId().getValue()).accept("application/json"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResultObject)));
+                .andExpect(content().json(this.objectMapper.writeValueAsString(expectedResultObject)));
     }
 
     @Test
@@ -134,13 +134,13 @@ public class FilmApiControllerTest {
 
         // ... or with objects
         FilmRequest filmRequest = new FilmRequest("1");
-        Film expectedResultObject = newFilm(filmId("1"),"Pulp Fiction", 1994);
+        Film expectedResultObject = newFilmWithId("1","Pulp Fiction", 1994);
         this.mockMvc
                 .perform(post("/api/films/generic-request")
                         .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(filmRequest)))
+                        .content(this.objectMapper.writeValueAsBytes(filmRequest)))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(expectedResultObject)));
+                .andExpect(content().json(this.objectMapper.writeValueAsString(expectedResultObject)));
     }
 
     @Test
