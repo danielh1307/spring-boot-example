@@ -26,7 +26,7 @@ public class HelloWorldController {
     public String hello(@RequestParam final String name, Principal principal) {
         LOGGER.info("Hello " + name);
         LOGGER.warn("Just a warning");
-        return String.format("Hello, %s\n", principal != null ? principal.getName() : "anonymous");
+        return String.format("Hello, %s%n", principal != null ? principal.getName() : "anonymous");
     }
 
     // TODO: test missing
