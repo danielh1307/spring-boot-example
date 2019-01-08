@@ -2,6 +2,8 @@ package danielh1307.springbootexample;
 
 import org.slf4j.Logger;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +28,9 @@ public class HelloWorldController {
     public String hello(@RequestParam final String name, Principal principal) {
         LOGGER.info("Hello " + name);
         LOGGER.warn("Just a warning");
-        return String.format("Hello, %s%n", principal != null ? principal.getName() : "anonymous");
+        String returnString = String.format("java.security.Principal: Hello, %s%n", principal != null ? principal.getName() : "anonymous");
+        User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return returnString + String.format("org.springframework.security.core.userdetails.User: Hello, %s%n", currentUser != null ? currentUser.getUsername() : "anonymous");
     }
 
     // TODO: test missing
