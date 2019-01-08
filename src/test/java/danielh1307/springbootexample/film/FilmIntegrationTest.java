@@ -4,23 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import danielh1307.springbootexample.film.domain.Film;
 import danielh1307.springbootexample.film.infrastructure.web.FilmApiController;
 import danielh1307.springbootexample.film.infrastructure.web.FilmRequest;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 
 import static danielh1307.springbootexample.film.domain.FilmId.filmId;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;

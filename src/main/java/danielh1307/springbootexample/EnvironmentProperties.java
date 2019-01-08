@@ -1,7 +1,6 @@
 package danielh1307.springbootexample;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 // @ConfigurationProperites supports relaxed binding and generation of metadata
 @ConfigurationProperties("environment")

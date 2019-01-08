@@ -1,7 +1,6 @@
 package danielh1307.springbootexample.film.infrastructure.web;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import danielh1307.springbootexample.film.infrastructure.web.FilmViewController;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
