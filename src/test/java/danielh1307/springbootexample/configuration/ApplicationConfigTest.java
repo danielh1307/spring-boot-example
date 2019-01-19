@@ -23,24 +23,24 @@ public class ApplicationConfigTest {
 
     @Test
     public void testContext() {
-        assertThat(ctx.containsBean("fooService"), is(true));
-        FooService fooService = ctx.getBean(FooService.class);
+        assertThat(this.ctx.containsBean("fooService"), is(true));
+        FooService fooService = this.ctx.getBean(FooService.class);
         assertThat(fooService.name, is(equalTo("I am a Foo service")));
 
-        assertThat(ctx.containsBean("barServiceSpecialName"), is(true));
-        BarService barService = ctx.getBean(BarService.class);
+        assertThat(this.ctx.containsBean("barServiceSpecialName"), is(true));
+        BarService barService = this.ctx.getBean(BarService.class);
         assertThat(barService.name, is(equalTo("I am a Bar service")));
     }
 
     @Test
     public void testFooServiceIsSingleton() {
-        FooService fooService = ctx.getBean(FooService.class);
-        BarService barService = ctx.getBean(BarService.class);
+        FooService fooService = this.ctx.getBean(FooService.class);
+        BarService barService = this.ctx.getBean(BarService.class);
         assertSame(fooService, barService.fooService);
     }
 
     @Test
     public void testLegacyConfigIsIncluded() {
-        assertThat(ctx.containsBean("legacyConfig"), is(true));
+        assertThat(this.ctx.containsBean("legacyConfig"), is(true));
     }
 }

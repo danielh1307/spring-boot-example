@@ -46,7 +46,7 @@ public class FilmApiController {
     }
 
     // here we can send the request as JSON, thanks to @RequestBody
-    // curl -X POST --data '{"filmKey": "1"}' -H "Content-Type: application/json" http://localhost:8080/films/number/request
+    // curl -u user:appl_123 -X POST --data '{"filmKey": "1"}' -H "Content-Type: application/json" http://localhost:8080/films/generic-request
     @PostMapping(value = "/films/generic-request", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ApiOperation("Returns the requested film as JSON")
     public Film genericRequest(@RequestBody final FilmRequest filmRequest) throws NoSuchFilmException {
