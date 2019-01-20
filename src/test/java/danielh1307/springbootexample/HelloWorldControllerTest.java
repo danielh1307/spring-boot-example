@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // than starting a full application context
 // @SpringBootTest in contrary loads the full application context
 @WebMvcTest(controllers = HelloWorldController.class) // only Spring MVC components are tested
-public class ApplicationTest {
+public class HelloWorldControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
