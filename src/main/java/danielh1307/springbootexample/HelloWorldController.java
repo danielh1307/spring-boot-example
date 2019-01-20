@@ -34,10 +34,16 @@ public class HelloWorldController {
     }
 
     // TODO: test missing
-    // user with role ADMIN may call this method
     @GetMapping("/allowed")
-    @PreAuthorize("hasRole('ADMIN')")
     public String allowed() {
+        return "I was called!";
+    }
+
+    // TODO: test missing
+    // user with role ADMIN may call this method
+    @GetMapping("/allowedForAdmin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String allowedForAdmin() {
         return "Allowed!";
     }
 
