@@ -33,13 +33,11 @@ public class HelloWorldController {
         return returnString + String.format("org.springframework.security.core.userdetails.User: Hello, %s%n", currentUser != null ? currentUser.getUsername() : "anonymous");
     }
 
-    // TODO: test missing
     @GetMapping("/allowed")
     public String allowed() {
         return "I was called!";
     }
 
-    // TODO: test missing
     // user with role ADMIN may call this method
     @GetMapping("/allowedForAdmin")
     @PreAuthorize("hasRole('ADMIN')")
@@ -47,7 +45,6 @@ public class HelloWorldController {
         return "Allowed!";
     }
 
-    // TODO: test missing
     // only user with role NEVER may call this method
     // remember:
     // 401 - unauthorized --> user is not authenticated
