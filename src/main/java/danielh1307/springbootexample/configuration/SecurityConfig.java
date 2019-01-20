@@ -22,7 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/allowed").permitAll() // this allows to call /allowed without authentication
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .httpBasic()
+                .and()
+                .csrf().disable(); // this allows POST calls to work without CSRF tokens
     }
 
     @Override

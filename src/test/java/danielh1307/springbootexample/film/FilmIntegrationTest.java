@@ -5,7 +5,6 @@ import danielh1307.springbootexample.film.domain.Film;
 import danielh1307.springbootexample.film.infrastructure.web.FilmApiController;
 import danielh1307.springbootexample.film.infrastructure.web.FilmRequest;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +77,6 @@ public class FilmIntegrationTest {
     }
 
     @Test
-    @Ignore("currently not working because POST and HTTP basic auth")
     public void genericRequest_withExistingId_correctFilmIsReturned() throws IOException {
         // act
         HttpHeaders headers = new HttpHeaders();
@@ -95,7 +93,6 @@ public class FilmIntegrationTest {
     }
 
     @Test
-    @Ignore("currently not working because POST and HTTP basic auth")
     public void addFilm_addNewFilm_filmWasAdded() throws IOException {
         // act
         ResponseEntity<String> response = this.restTemplate

@@ -3,7 +3,6 @@ package danielh1307.springbootexample.film.infrastructure.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danielh1307.springbootexample.film.domain.Film;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +124,6 @@ public class FilmApiControllerWithTestFilmRepositoryTest {
     }
 
     @Test
-    @Ignore("POST with basic auth currently not working")
     public void genericRequest_withExistingFilmKey_validJsonIsReturned() throws Exception {
         // either with strings ...
         this.mockMvc
@@ -149,7 +147,6 @@ public class FilmApiControllerWithTestFilmRepositoryTest {
     }
 
     @Test
-    @Ignore("POST with basic auth currently not working")
     public void genericRequest_withMissingFilmKey_http404IsReturned() throws Exception {
         this.mockMvc
                 .perform(post("/api/films/generic-request")
