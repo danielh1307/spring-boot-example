@@ -21,12 +21,13 @@ import java.io.IOException;
 import static danielh1307.springbootexample.film.domain.FilmId.filmId;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 // Test data for this test is loaded in test/resources flyway scripts
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 public class FilmIntegrationTest {
 
     @Autowired
