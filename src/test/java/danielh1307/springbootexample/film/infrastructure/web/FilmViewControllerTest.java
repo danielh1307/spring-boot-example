@@ -1,13 +1,13 @@
 package danielh1307.springbootexample.film.infrastructure.web;
 
 import com.gargoylesoftware.htmlunit.html.*;
-import danielh1307.springbootexample.film.infrastructure.web.FilmViewController;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.htmlunit.LocalHostWebClient;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -17,11 +17,14 @@ import static java.util.stream.StreamSupport.stream;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = FilmViewController.class)
+// we are using SpringBootTest together with LocalHostWebClient - so this is some kind of "integration test"
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureMockMvc
 public class FilmViewControllerTest {
 
     @Autowired
@@ -38,7 +41,7 @@ public class FilmViewControllerTest {
     @Test
     public void getOverview_requestHtmlOverview_htmlOverviewReturned() throws Exception {
         // act
-        HtmlPage htmlPage = this.localHostWebClient.getPage("http://localhost:8080/films/overview");
+        HtmlPage htmlPage = this.localHostWebClient.getPage("/films/overview");
         HtmlElement bodyElement = htmlPage.getBody();
         HtmlElement filmName = getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");
         HtmlElement filmYear = getFirstHtmlElementsByItemprop(bodyElement, "filmyear");
@@ -48,20 +51,10 @@ public class FilmViewControllerTest {
         assertThat(filmYear.getFirstChild().getNodeValue(), is(equalTo("1996")));
     }
 
-    /**
-     * TODO
-     *
-     * Currently the problem seems to be a HtmlUnitMockHttpServletRequest is sent to the server. This class does not
-     * implement MultipartHttpServletRequest, so the mapping of the multipart cannot be done.
-     *
-     * If we test the same call with MockMvc, a MockMultipartHttpServletRequest is sent to the server and the fields
-     * are correct set.
-     */
     @Test
-    @Ignore("This test does only work as an integration test against an 'external' container, not as unit test")
     public void uploadFilm_formUpload_redirectsToCorrectPage() throws Exception {
         // arrange
-        HtmlPage htmlPage = this.localHostWebClient.getPage("http://localhost:8080/films/addFilm");
+        HtmlPage htmlPage = this.localHostWebClient.getPage("/films/addFilm");
         HtmlElement bodyElement = htmlPage.getBody();
         HtmlForm form = htmlPage.getForms().get(0);
         HtmlInput filmTitleInput = (HtmlInput) getFirstHtmlElementsByItemprop(bodyElement, "filmtitle");
@@ -89,6 +82,7 @@ public class FilmViewControllerTest {
                         .file("cover", "123".getBytes())
                         .param("title", "Pulp Fiction")
                         .param("year", "1996")
+                        .with(SecurityMockMvcRequestPostProcessors.user("some_user"))
                 )
                 .andExpect(redirectedUrl("filmUploaded?filename=Pulp+Fiction-1996.jpg"));
     }

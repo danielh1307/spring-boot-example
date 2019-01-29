@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.startsWith;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,16 +19,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // than starting a full application context
 // @SpringBootTest in contrary loads the full application context
 @WebMvcTest(controllers = HelloWorldController.class) // only Spring MVC components are tested
-public class ApplicationTest {
+public class HelloWorldControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void helloWorldShouldWork() throws Exception {
+        // we can take any user here - it must not be the one which is really configured
+        String expectedString = "java.security.Principal: Hello, some_user\n" +
+                "org.springframework.security.core.userdetails.User: Hello, some_user\n";
+
         this.mockMvc
-                .perform(get("/hello").param("name", "World"))
+                .perform(get("/hello").param("name", "World").with(user("some_user")))
                 .andExpect(status().isOk())
-                .andExpect(content().string(startsWith("Hello, World")));
+                .andExpect(content().string(expectedString));
     }
 }
