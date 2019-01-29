@@ -33,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    // UserDetailsService is used by the DaoAuthenticationProvider, a quite old AuthenticationProvider
+    // By default we have an in-memory implementation (InMemoryUserDetailsManager) and a JDBC implementation
     protected UserDetailsService userDetailsService() {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         UserDetails user = User.withUsername("user")
