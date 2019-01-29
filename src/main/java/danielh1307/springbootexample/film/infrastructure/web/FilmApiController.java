@@ -40,6 +40,12 @@ public class FilmApiController {
         return this.filmService.getFilm(filmId(filmId));
     }
 
+    @GetMapping(value = "/films/secret", produces = APPLICATION_JSON_VALUE)
+    @ApiOperation("Returns the requested film as JSON, but requires ADMIN role")
+    public Film getSecretFilm() {
+        return this.filmService.getSecretFilm();
+    }
+
     @PostMapping(value = "/films", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public Film addFilm(@RequestBody final AddNewFilmRequest filmRequest) {
         return this.filmService.addFilm(filmRequest.title, filmRequest.year);
