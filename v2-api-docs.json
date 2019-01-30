@@ -1,0 +1,249 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "DESCIPRION",
+    "version" : "VERSION",
+    "title" : "TITLE",
+    "termsOfService" : "TERMS OF SERVICE URL",
+    "contact" : {
+      "name" : "NAME",
+      "url" : "URL",
+      "email" : "EMAIL"
+    },
+    "license" : {
+      "name" : "LICENSE",
+      "url" : "LICENSE URL"
+    }
+  },
+  "host" : "generic-host",
+  "basePath" : "/",
+  "tags" : [ {
+    "name" : "film-api-controller",
+    "description" : "This is the API controller for film model"
+  } ],
+  "paths" : {
+    "/api/films" : {
+      "post" : {
+        "tags" : [ "film-api-controller" ],
+        "summary" : "addFilm",
+        "operationId" : "addFilmUsingPOST",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "filmRequest",
+          "description" : "filmRequest",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/AddNewFilmRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Film"
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "deprecated" : false
+      }
+    },
+    "/api/films/generic-request" : {
+      "post" : {
+        "tags" : [ "film-api-controller" ],
+        "summary" : "Returns the requested film as JSON",
+        "operationId" : "genericRequestUsingPOST",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "filmRequest",
+          "description" : "filmRequest",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/FilmRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Film"
+            }
+          },
+          "201" : {
+            "description" : "Created"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "deprecated" : false
+      }
+    },
+    "/api/films/secret" : {
+      "get" : {
+        "tags" : [ "film-api-controller" ],
+        "summary" : "Returns the requested film as JSON, but requires ADMIN role",
+        "operationId" : "getSecretFilmUsingGET",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Film"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "deprecated" : false
+      }
+    },
+    "/api/films/{filmId}" : {
+      "get" : {
+        "tags" : [ "film-api-controller" ],
+        "summary" : "Returns the requested film either as JSON, XML or CSV (depending on accept header or parameter mediaType)",
+        "operationId" : "getFilmUsingGET",
+        "produces" : [ "application/xml", "application/json", "text/csv" ],
+        "parameters" : [ {
+          "name" : "filmId",
+          "in" : "path",
+          "description" : "filmId",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Film"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "deprecated" : false
+      }
+    },
+    "/api/films/{filmId}/title" : {
+      "get" : {
+        "tags" : [ "film-api-controller" ],
+        "summary" : "Returns the title of a specific film as String",
+        "operationId" : "getFilmTitleUsingGET",
+        "produces" : [ "*/*" ],
+        "parameters" : [ {
+          "name" : "filmId",
+          "in" : "path",
+          "description" : "filmId",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "string"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        },
+        "deprecated" : false
+      }
+    }
+  },
+  "definitions" : {
+    "AddNewFilmRequest" : {
+      "type" : "object",
+      "properties" : {
+        "title" : {
+          "type" : "string"
+        },
+        "year" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      },
+      "title" : "AddNewFilmRequest"
+    },
+    "Film" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "description" : "This is the ID of the film",
+          "$ref" : "#/definitions/FilmId"
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "This is the title of the film"
+        },
+        "year" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "This is the year when the film was released"
+        }
+      },
+      "title" : "Film",
+      "description" : "Here is a description for the film class"
+    },
+    "FilmId" : {
+      "type" : "object",
+      "properties" : {
+        "value" : {
+          "type" : "string"
+        }
+      },
+      "title" : "FilmId"
+    },
+    "FilmRequest" : {
+      "type" : "object",
+      "properties" : {
+        "filmKey" : {
+          "type" : "string"
+        }
+      },
+      "title" : "FilmRequest"
+    }
+  }
+}
