@@ -63,6 +63,10 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional> <!-- only used if specific features are active; optional dependencies are not inherited transitively -->
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-ldap</artifactId>
+		</dependency>
 
 		<!-- Swagger dependency -->
 		<!-- http://localhost:8080/v2/api-docs ==> get description as JSON -->

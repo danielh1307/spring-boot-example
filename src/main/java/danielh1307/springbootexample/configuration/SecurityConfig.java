@@ -20,6 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/allowed").permitAll() // this allows to call /allowed without authentication
+                .antMatchers("/ldap").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
