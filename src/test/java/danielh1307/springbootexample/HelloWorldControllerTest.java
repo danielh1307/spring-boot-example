@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static java.lang.System.lineSeparator;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -27,8 +28,8 @@ public class HelloWorldControllerTest {
     @Test
     public void helloWorldShouldWork() throws Exception {
         // we can take any user here - it must not be the one which is really configured
-        String expectedString = "java.security.Principal: Hello, some_user\n" +
-                "org.springframework.security.core.userdetails.User: Hello, some_user\n";
+        String expectedString = "java.security.Principal: Hello, some_user" + lineSeparator() +
+                "org.springframework.security.core.userdetails.User: Hello, some_user" + lineSeparator();
 
         this.mockMvc
                 .perform(get("/hello").param("name", "World").with(user("some_user")))
